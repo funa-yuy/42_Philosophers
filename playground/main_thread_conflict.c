@@ -10,39 +10,72 @@
 // int pthread_create(pthread_t *thread, const pthread_attr_t *attr, \
 // 				void *(*start_routine) (void *), void *arg);
 
+typedef struct	s_thread_arg
+{
+	int			 value_copy;	// 各スレッドがコピーを受け取る → 競合しない
+	int			 *value_shared;	// 全スレッドが同じアドレスを参照 → 競合の可能性あり
+}	t_thread_arg;
 
 void	*start_routine(void *arg)
 {
-	int	*arg_num;
+	t_thread_arg	*args;
+	int				*shared_num;
+	int				copy_num;
 
-	arg_num = (int *)arg;
-	printf("引数 = %d\n", *arg_num);
+	args = arg;
+	/* 0であるvalueをインクリメント → 本来0, 1と表示されるはず */
+	printf("------------------------------\n");
 
-	/* 0であるarg_numをインクリメント */
-	printf("(*引数)++\n");
-	(*arg_num)++;
-
-	/* 本来は1になるはず */
-	printf("引数 = %d\n", *arg_num);
+	/*        参照渡しの場合       */
+	shared_num = args->value_shared;
+	printf("value_shared = %d\n", *shared_num);
+	printf("(*value_shared)++\n");
+	(*shared_num)++;
+	printf("value_shared = %d\n", *shared_num);
 	printf("\n");
-	return (arg_num);
+
+
+	/*        値渡しの場合         */
+	copy_num = args->value_copy;
+	printf("value_copy = %d\n", copy_num);
+	printf("value_copy++\n");
+	copy_num++;
+	printf("value_copy = %d\n", copy_num);
+	printf("\n");
+
+
+	/* args->value_copyをローカル変数に代入せず、直接構造体のメンバにアクセスして操作する場合
+	 他スレッドでも同じ構造体を使用しているため、競合する */
+	// printf("value_copy = %d\n", args->value_copy);
+	// printf("value_copy++\n");
+	// args->value_copy++;
+	// printf("value_copy = %d\n", args->value_copy);
+	// printf("\n");
+
+	printf("------------------------------\n");
+	return (args->value_shared);
 }
 
 int	main(void)
 {
 	int				s;
-	pthread_t		thread_id[2];
+	pthread_t		thread_id[3];
 	size_t			i_num;
-	int				arg;
 	void			 *retval;
+	t_thread_arg	args;
+	int				shared_value;
 
-	arg = 0;
+	/* threadの引数として渡す構造体をinit */
+	args.value_copy = 0;
+	shared_value = 0;
+	args.value_shared = &shared_value;
+
 	/* threadをcreateして */
 	i_num = 0;
-	while (2 > i_num)
+	while (3 > i_num)
 	{
-		printf("%zuスレッド: 引数 = %d\n", i_num, arg);
-		s = pthread_create(&thread_id[i_num], NULL, start_routine, &arg);
+		printf("%zuスレッド: value_copy = %d, value_shared = %d\n", i_num, args.value_copy, *args.value_shared);
+		s = pthread_create(&thread_id[i_num], NULL, start_routine, &args);
 		if (s != 0)
 			printf("pthread_create: %s\n", strerror(s));
 		i_num++;
@@ -50,7 +83,7 @@ int	main(void)
 
 	/* thread_idのスレッドの返り値を取得する */
 	i_num = 0;
-	while (2 > i_num)
+	while (3 > i_num)
 	{
 		s = pthread_join(thread_id[i_num], &retval);
 		if (s != 0)
@@ -58,6 +91,6 @@ int	main(void)
 		printf("%zuスレッド: 戻り値 =  %d\n", i_num, *(int *)retval);
 		i_num++;
 	}
-	printf("Main thread: final shared = %d\n", arg);
+	printf("Main thread: final shared = %d\n", args.value_copy);
 	return (0);
 }
