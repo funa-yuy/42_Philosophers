@@ -1,4 +1,4 @@
-/* mutxtの流れ */
+/* マルチスレッドによりデータ競合が起きる流れ */
 
 #include <pthread.h>
 #include <stdio.h>
@@ -16,9 +16,15 @@ void	*start_routine(void *arg)
 	int	*arg_num;
 
 	arg_num = (int *)arg;
-	printf("%d: start!!\n", *arg_num);
+	printf("引数 = %d\n", *arg_num);
+
+	/* 0であるarg_numをインクリメント */
+	printf("(*引数)++\n");
 	(*arg_num)++;
-	printf("%d: next!!\n", *arg_num);
+
+	/* 本来は1になるはず */
+	printf("引数 = %d\n", *arg_num);
+	printf("\n");
 	return (arg_num);
 }
 
@@ -35,7 +41,7 @@ int	main(void)
 	i_num = 0;
 	while (2 > i_num)
 	{
-		// printf("%zu: pthread_create\n", i_num);
+		printf("%zuスレッド: 引数 = %d\n", i_num, arg);
 		s = pthread_create(&thread_id[i_num], NULL, start_routine, &arg);
 		if (s != 0)
 			printf("pthread_create: %s\n", strerror(s));
@@ -49,7 +55,7 @@ int	main(void)
 		s = pthread_join(thread_id[i_num], &retval);
 		if (s != 0)
 			printf("pthread_join: %s\n", strerror(s));
-		printf("pthread_join =  %d\n", *(int *)retval);
+		printf("%zuスレッド: 戻り値 =  %d\n", i_num, *(int *)retval);
 		i_num++;
 	}
 	printf("Main thread: final shared = %d\n", arg);
