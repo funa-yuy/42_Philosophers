@@ -23,7 +23,6 @@ void	*start_routine(void *arg)
 	int				copy_num;
 
 	args = arg;
-	/* 0であるvalueをインクリメント → 本来0, 1と表示されるはず */
 	printf("------------------------------\n");
 
 	/*        参照渡しの場合       */
@@ -53,7 +52,7 @@ void	*start_routine(void *arg)
 	// printf("\n");
 
 	printf("------------------------------\n");
-	return (args->value_shared);
+	return (shared_num);
 }
 
 int	main(void)
