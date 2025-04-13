@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <unistd.h>
 
 // int pthread_join(pthread_t thread, void **retval);
 // int pthread_create(pthread_t *thread, const pthread_attr_t *attr, \
@@ -13,31 +13,45 @@
 
 void	*start_routine(void *arg)
 {
-	int	*num;
+	int	*arg_num;
 
-	(void)arg;
-	num = malloc(sizeof(int));
-	*num = 42;
-	printf("start_routine!!: %d\n", *(int *)num);
-	return (num);
+	arg_num = (int *)arg;
+	printf("%d: start!!\n", *arg_num);
+	(*arg_num)++;
+	printf("%d: next!!\n", *arg_num);
+	return (arg_num);
 }
 
 int	main(void)
 {
 	int				s;
-	pthread_t		thread_id;
+	pthread_t		thread_id[2];
+	size_t			i_num;
+	int				arg;
 	void			 *retval;
 
+	arg = 0;
 	/* threadをcreateして */
-	s = pthread_create(&thread_id, NULL, start_routine, NULL);
-	if (s != 0)
-		printf("pthread_create: %s\n", strerror(s));
+	i_num = 0;
+	while (2 > i_num)
+	{
+		// printf("%zu: pthread_create\n", i_num);
+		s = pthread_create(&thread_id[i_num], NULL, start_routine, &arg);
+		if (s != 0)
+			printf("pthread_create: %s\n", strerror(s));
+		i_num++;
+	}
 
 	/* thread_idのスレッドの返り値を取得する */
-	s = pthread_join(thread_id, &retval);
-	if (s != 0)
-		printf("pthread_join: %s\n", strerror(s));
-	printf("pthread_join =  %d\n", *(int *)retval);
-	free(retval);
+	i_num = 0;
+	while (2 > i_num)
+	{
+		s = pthread_join(thread_id[i_num], &retval);
+		if (s != 0)
+			printf("pthread_join: %s\n", strerror(s));
+		printf("pthread_join =  %d\n", *(int *)retval);
+		i_num++;
+	}
+	printf("Main thread: final shared = %d\n", arg);
 	return (0);
 }
