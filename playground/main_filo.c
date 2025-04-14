@@ -5,10 +5,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 // int pthread_join(pthread_t thread, void **retval);
 // int pthread_create(pthread_t *thread, const pthread_attr_t *attr, \
 // 				void *(*start_routine) (void *), void *arg);
+// int gettimeofday(struct timeval *tv, struct rtimezone *tz);
 
 
 typedef struct	s_thread_arg
@@ -18,29 +20,43 @@ typedef struct	s_thread_arg
 	pthread_mutex_t	*mutex;
 }	t_thread_arg;
 
-typedef struct	s_philo_rules
+typedef struct	s_uni_rules
 {
 	int	num_philo;
 	int	time_die;
 	int	time_eat;
 	int	time_sleep;
 	int	num_must_eat;
-}	t_philo_rules;
+}	t_uni_rules;
 
 void	*action_philosophers(void *arg)
 {
 	t_thread_arg	*data;
+	struct timeval	tv1;
+	struct timeval	tv2;
+	long			tv1_ms;
+	long			tv2_ms;
 
 	data = arg;
 
-	printf("thread_id = %lu \n", (unsigned long)data->thread_id);
 	printf("num = %d \n", data->num);
+
+	gettimeofday(&tv1, NULL);
+	tv1_ms = tv1.tv_sec * 1000L + tv1.tv_usec / 1000L;
+	printf("time stamp1: %ld\n", tv1_ms);
+
+	usleep(1000000);
+
+	gettimeofday(&tv2, NULL);
+	tv2_ms = tv2.tv_sec * 1000L + tv2.tv_usec / 1000L;
+	printf("time stamp2: %ld, diff: %ld\n", tv2_ms, tv2_ms - tv1_ms);
+
 	return (NULL);
 }
 
-t_philo_rules	init_philo_rules(int argc, char *argv[])
+t_uni_rules	init_uni_rules(int argc, char *argv[])
 {
-	t_philo_rules	rules;
+	t_uni_rules	rules;
 
 	rules.num_philo = atoi(argv[1]);
 	rules.time_die = atoi(argv[2]);
@@ -53,7 +69,7 @@ t_philo_rules	init_philo_rules(int argc, char *argv[])
 	return (rules);
 }
 
-void	mulch_thread(t_philo_rules rules)
+void	mulch_thread(t_uni_rules rules)
 {
 	t_thread_arg	*arg;
 	void			*retval;
@@ -92,11 +108,11 @@ void	mulch_thread(t_philo_rules rules)
 
 int	main(int argc, char *argv[])
 {
-	t_philo_rules	rules;
+	t_uni_rules	rules;
 
 	if (argc > 6 || argc < 5)
 		return (1);
-	rules = init_philo_rules(argc, argv);
+	rules = init_uni_rules(argc, argv);
 
 	// printf("Philosophers: %d\n", rules.num_philo);
 	// printf("Time to die: %d\n", rules.time_die);
