@@ -75,6 +75,7 @@ int	main(void)
 	t_thread_arg	args;
 	int				shared_value;
 
+	/* mutexをinitして */
 	pthread_mutex_init(&mutex, NULL);
 	args.value_copy = 0;
 	shared_value = 0;
@@ -92,6 +93,7 @@ int	main(void)
 		i_num++;
 	}
 
+	/* 必要無くなったmutexをdestroyして */
 	pthread_mutex_destroy(&mutex);
 
 	/* thread_idのスレッドの返り値を取得する */
