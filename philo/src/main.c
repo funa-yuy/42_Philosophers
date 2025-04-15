@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/15 19:29:38 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/15 20:43:33 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,28 @@ void	*action_philosophers(void *arg)
 
 	data = arg;
 	rules = data->u_rules;
-	printf("num_philo = %d \n", data->num_philo);
+	printf("philo_id = %d \n", data->philo_id + 1);
 
 	gettimeofday(&tv, NULL);
 	last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
 
 	/* forkを手に取る */
-	printf_philo_status("has taken a fork", data->num_philo, last_tv_ms);
+	printf_philo_status("has taken a fork", data->philo_id + 1, last_tv_ms);
 
 	/* eatを開始 */
-	last_tv_ms = printf_philo_status("is eating", data->num_philo, last_tv_ms);
+	last_tv_ms = printf_philo_status("is eating", data->philo_id + 1, last_tv_ms);
 	usleep(rules.time_eat * UNIT_CONV);
 
 	/* eatが終わり、sleepを開始 */
-	last_tv_ms = printf_philo_status("is sleeping", data->num_philo, last_tv_ms);
+	last_tv_ms = printf_philo_status("is sleeping", data->philo_id + 1, last_tv_ms);
 	usleep(rules.time_sleep * UNIT_CONV);
 
 	/* sleepが終わり、thinkingを開始 */
-	last_tv_ms = printf_philo_status("is thinking", data->num_philo, last_tv_ms);
+	last_tv_ms = printf_philo_status("is thinking", data->philo_id + 1, last_tv_ms);
 
 	/* time_dieを超えたので、die */
 	usleep(rules.time_die * UNIT_CONV);
-	printf_philo_status("died", data->num_philo, last_tv_ms);
+	printf_philo_status("died", data->philo_id + 1, last_tv_ms);
 
 	return (NULL);
 }
@@ -51,18 +51,28 @@ void	mulch_thread(t_univ_rules rules)
 {
 	t_thread_arg	*arg;
 	void			*retval;
-	pthread_mutex_t	mutex;
+	pthread_mutex_t	*forks;
 	int				i;
 	int				s;
 
 	arg = calloc(rules.total_philo, sizeof(t_thread_arg));
-	pthread_mutex_init(&mutex, NULL);
+	if (arg == NULL)
+		return ;
+	forks = calloc(rules.total_philo, sizeof(pthread_mutex_t));
+	if (forks == NULL)
+		return ;
+
 	i = 0;
 	while (rules.total_philo > i)
 	{
-		arg[i].mutex = &mutex;
-		arg[i].num_philo = i;
-		arg[i].u_rules = rules;
+		pthread_mutex_init(&forks[i], NULL);
+		i++;
+	}
+
+	i = 0;
+	while (rules.total_philo > i)
+	{
+		init_thread_arg(&arg[i], i, rules, forks);
 		printf("thread%dを作成 \n", i);
 		s = pthread_create(&arg[i].thread_id, NULL, action_philosophers, &arg[i]);
 		if (s != 0)
@@ -70,7 +80,13 @@ void	mulch_thread(t_univ_rules rules)
 		i++;
 	}
 
-	pthread_mutex_destroy(&mutex);
+	i = 0;
+	while (rules.total_philo > i)
+	{
+		pthread_mutex_destroy(&forks[i]);
+		i++;
+	}
+	free(forks);
 
 	i = 0;
 	while (rules.total_philo > i)
