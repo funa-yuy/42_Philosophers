@@ -6,7 +6,7 @@
 #    By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 01:21:55 by miyuu             #+#    #+#              #
-#    Updated: 2025/04/14 21:01:39 by miyuu            ###   ########.fr        #
+#    Updated: 2025/04/15 19:29:23 by miyuu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,9 @@ SRC_DIR = src
 OBJ_DIR = bin
 
 # Source files
-SRC_FILES = main.c
+SRC_FILES = main.c \
+			init_univ_rules.c \
+			printf_philo_status.c
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))

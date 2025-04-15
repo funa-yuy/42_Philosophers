@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/14 20:56:28 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/15 19:29:38 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,34 @@ void	*action_philosophers(void *arg)
 	t_thread_arg	*data;
 	t_univ_rules	rules;
 	struct timeval	tv;
-	long			tv1_ms;
-	long			tv2_ms;
+	long			last_tv_ms;
 
 	data = arg;
 	rules = data->u_rules;
 	printf("num_philo = %d \n", data->num_philo);
 
 	gettimeofday(&tv, NULL);
-	tv1_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
-	printf("time stamp1(ms): \x1b[32m%ld\x1b[39m\n", tv1_ms);
+	last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
 
+	/* forkを手に取る */
+	printf_philo_status("has taken a fork", data->num_philo, last_tv_ms);
+
+	/* eatを開始 */
+	last_tv_ms = printf_philo_status("is eating", data->num_philo, last_tv_ms);
 	usleep(rules.time_eat * UNIT_CONV);
 
-	gettimeofday(&tv, NULL);
-	tv2_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
-	printf("time stamp2(ms): \x1b[32m%ld\x1b[39m, diff: \x1b[32m%ld\x1b[39m\n", tv2_ms, tv2_ms - tv1_ms);
+	/* eatが終わり、sleepを開始 */
+	last_tv_ms = printf_philo_status("is sleeping", data->num_philo, last_tv_ms);
+	usleep(rules.time_sleep * UNIT_CONV);
+
+	/* sleepが終わり、thinkingを開始 */
+	last_tv_ms = printf_philo_status("is thinking", data->num_philo, last_tv_ms);
+
+	/* time_dieを超えたので、die */
+	usleep(rules.time_die * UNIT_CONV);
+	printf_philo_status("died", data->num_philo, last_tv_ms);
 
 	return (NULL);
-}
-
-t_univ_rules	init_univ_rules(int argc, char *argv[])
-{
-	t_univ_rules	rules;
-
-	rules.total_philo = atoi(argv[1]);
-	rules.time_die = atoi(argv[2]);
-	rules.time_eat = atoi(argv[3]);
-	rules.time_sleep = atoi(argv[4]);
-	if (argc == 6)
-		rules.must_eat = atoi(argv[5]);
-	else
-		rules.must_eat = -1;
-	return (rules);
 }
 
 void	mulch_thread(t_univ_rules rules)
@@ -94,7 +89,10 @@ int	main(int argc, char *argv[])
 	t_univ_rules	rules;
 
 	if (argc > 6 || argc < 5)
+	{
+		printf("Invalid number of arguments.\n");
 		return (1);
+	}
 	rules = init_univ_rules(argc, argv);
 
 	printf("Philosophers: %d\n", rules.total_philo);
