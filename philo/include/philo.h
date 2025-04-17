@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/15 20:32:55 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/17 13:20:15 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ typedef struct s_thread_arg
 	pthread_mutex_t	*mutex;
 	int				left_fork;
 	int				right_fork;
+	long			start_tv_ms;
 	t_univ_rules	u_rules;
 }	t_thread_arg;
 
 /* function */
 t_univ_rules	init_univ_rules(int argc, char *argv[]);
-long			printf_philo_status(char *status, int n_philo, long last_time);
-
-void	init_thread_arg(t_thread_arg *arg, int id, t_univ_rules rules, pthread_mutex_t *forks);
+long			printf_philo_status(char *status, long s_time, int n_philo, long last_time);
+void			init_thread_arg(t_thread_arg *arg, int id, t_univ_rules rules, pthread_mutex_t *forks, long start_tv_ms);
 
 #endif
