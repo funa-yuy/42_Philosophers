@@ -6,7 +6,7 @@
 #    By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 01:21:55 by miyuu             #+#    #+#              #
-#    Updated: 2025/04/17 13:20:05 by miyuu            ###   ########.fr        #
+#    Updated: 2025/04/17 15:28:48 by miyuu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ HEADER_DIR = include
 SRC_FILES = main.c \
 			init_univ_rules.c \
 			printf_philo_status.c \
-			init_thread_arg.c
+			init_thread_arg.c \
+			mulch_thread.c
 
 # Header files
 HEADER = $(HEADER_DIR)/philo.h
