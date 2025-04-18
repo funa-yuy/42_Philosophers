@@ -6,7 +6,7 @@
 #    By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 01:21:55 by miyuu             #+#    #+#              #
-#    Updated: 2025/04/14 21:01:39 by miyuu            ###   ########.fr        #
+#    Updated: 2025/04/18 09:19:16 by miyuu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,18 @@ CFLAGS = -Wall -Wextra -Werror
 # Directories
 SRC_DIR = src
 OBJ_DIR = bin
+HEADER_DIR = include
 
 # Source files
-SRC_FILES = main.c
+SRC_FILES = main.c \
+			init_univ_rules.c \
+			printf_philo_status.c \
+			init_thread_arg.c \
+			lets_go_mulch_thread.c
+
+# Header files
+HEADER = $(HEADER_DIR)/philo.h
+
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
@@ -36,8 +45,8 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 
 # Compile each .c file into a .o file inside OBJ_DIR
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
+	$(CC) $(CFLAGS) -I$(HEADER_DIR) -c $< -o $@
 
 # Clean all object files
 clean:

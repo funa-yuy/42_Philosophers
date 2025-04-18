@@ -6,95 +6,97 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/14 20:56:28 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/18 09:18:40 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+void	take_forks(t_thread_arg *philo)
+{
+	struct timeval	tv;
+	long			last_tv_ms;
+
+	if (philo->philo_id % 2 == 0)
+	{
+		printf("%d: philo->right_fork = %d待ち\n", philo->philo_id + 1, philo->right_fork_n);
+		pthread_mutex_lock(philo->right_fork);
+		gettimeofday(&tv, NULL);
+		last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
+		printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, last_tv_ms);
+
+
+		printf("%d: philo->left_fork = %d待ち\n", philo->philo_id + 1, philo->left_fork_n);
+		pthread_mutex_lock(philo->left_fork);
+		gettimeofday(&tv, NULL);
+		last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
+		printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, last_tv_ms);
+	}
+	else
+	{
+		printf("%d: philo->left_fork = %d待ち\n", philo->philo_id + 1, philo->left_fork_n);
+		pthread_mutex_lock(philo->left_fork);
+		gettimeofday(&tv, NULL);
+		last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
+		printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, last_tv_ms);
+
+		printf("%d: philo->right_fork = %d待ち\n", philo->philo_id + 1, philo->right_fork_n);
+		pthread_mutex_lock(philo->right_fork);
+		gettimeofday(&tv, NULL);
+		last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
+		printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, last_tv_ms);
+	}
+}
+
+void	put_forks(t_thread_arg *philo)
+{
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+}
 
 void	*action_philosophers(void *arg)
 {
 	t_thread_arg	*data;
 	t_univ_rules	rules;
 	struct timeval	tv;
-	long			tv1_ms;
-	long			tv2_ms;
+	long			last_tv_ms;
 
 	data = arg;
 	rules = data->u_rules;
-	printf("num_philo = %d \n", data->num_philo);
 
+	take_forks(data);
 	gettimeofday(&tv, NULL);
-	tv1_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
-	printf("time stamp1(ms): \x1b[32m%ld\x1b[39m\n", tv1_ms);
+	last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
 
+	/* eatを開始 */
+	last_tv_ms = printf_philo_status("is eating", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 	usleep(rules.time_eat * UNIT_CONV);
 
-	gettimeofday(&tv, NULL);
-	tv2_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
-	printf("time stamp2(ms): \x1b[32m%ld\x1b[39m, diff: \x1b[32m%ld\x1b[39m\n", tv2_ms, tv2_ms - tv1_ms);
+	put_forks(data);
+
+	/* eatが終わり、sleepを開始 */
+	last_tv_ms = printf_philo_status("is sleeping", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+	usleep(rules.time_sleep * UNIT_CONV);
+
+	/* sleepが終わり、thinkingを開始 */
+	last_tv_ms = printf_philo_status("is thinking", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+
+	/* time_dieを超えたので、die */
+	usleep(rules.time_die * UNIT_CONV);
+	printf_philo_status("died", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 
 	return (NULL);
 }
-
-t_univ_rules	init_univ_rules(int argc, char *argv[])
-{
-	t_univ_rules	rules;
-
-	rules.total_philo = atoi(argv[1]);
-	rules.time_die = atoi(argv[2]);
-	rules.time_eat = atoi(argv[3]);
-	rules.time_sleep = atoi(argv[4]);
-	if (argc == 6)
-		rules.must_eat = atoi(argv[5]);
-	else
-		rules.must_eat = -1;
-	return (rules);
-}
-
-void	mulch_thread(t_univ_rules rules)
-{
-	t_thread_arg	*arg;
-	void			*retval;
-	pthread_mutex_t	mutex;
-	int				i;
-	int				s;
-
-	arg = calloc(rules.total_philo, sizeof(t_thread_arg));
-	pthread_mutex_init(&mutex, NULL);
-	i = 0;
-	while (rules.total_philo > i)
-	{
-		arg[i].mutex = &mutex;
-		arg[i].num_philo = i;
-		arg[i].u_rules = rules;
-		printf("thread%dを作成 \n", i);
-		s = pthread_create(&arg[i].thread_id, NULL, action_philosophers, &arg[i]);
-		if (s != 0)
-			printf("pthread_create: %s\n", strerror(s));
-		i++;
-	}
-
-	pthread_mutex_destroy(&mutex);
-
-	i = 0;
-	while (rules.total_philo > i)
-	{
-		s = pthread_join(arg[i].thread_id, &retval);
-		if (s != 0)
-			printf("pthread_join: %s\n", strerror(s));
-		i++;
-	}
-	free(arg);
-}
-
 
 int	main(int argc, char *argv[])
 {
 	t_univ_rules	rules;
 
 	if (argc > 6 || argc < 5)
+	{
+		printf("Invalid number of arguments.\n");
 		return (1);
+	}
 	rules = init_univ_rules(argc, argv);
 
 	printf("Philosophers: %d\n", rules.total_philo);
@@ -103,7 +105,7 @@ int	main(int argc, char *argv[])
 	printf("Time to sleep: %d\n", rules.time_sleep);
 	printf("Each must eat: %d\n", rules.must_eat);
 
-	mulch_thread(rules);
+	lets_go_mulch_thread(rules);
 
 	return (0);
 }
