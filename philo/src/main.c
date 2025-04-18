@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/18 09:18:40 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/18 11:16:28 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,25 @@ void	*action_philosophers(void *arg)
 
 	data = arg;
 	rules = data->u_rules;
+	while (1)
+	{
+		take_forks(data);
+		gettimeofday(&tv, NULL);
+		last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
 
-	take_forks(data);
-	gettimeofday(&tv, NULL);
-	last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
+		/* eatを開始 */
+		last_tv_ms = printf_philo_status("is eating", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+		usleep(rules.time_eat * UNIT_CONV);
 
-	/* eatを開始 */
-	last_tv_ms = printf_philo_status("is eating", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
-	usleep(rules.time_eat * UNIT_CONV);
+		put_forks(data);
 
-	put_forks(data);
+		/* eatが終わり、sleepを開始 */
+		last_tv_ms = printf_philo_status("is sleeping", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+		usleep(rules.time_sleep * UNIT_CONV);
 
-	/* eatが終わり、sleepを開始 */
-	last_tv_ms = printf_philo_status("is sleeping", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
-	usleep(rules.time_sleep * UNIT_CONV);
-
-	/* sleepが終わり、thinkingを開始 */
-	last_tv_ms = printf_philo_status("is thinking", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+		/* sleepが終わり、thinkingを開始 */
+		last_tv_ms = printf_philo_status("is thinking", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+	}
 
 	/* time_dieを超えたので、die */
 	usleep(rules.time_die * UNIT_CONV);
