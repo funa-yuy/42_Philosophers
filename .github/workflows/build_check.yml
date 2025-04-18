@@ -25,4 +25,4 @@ jobs:
 
       # Compile the project using the make command
       - name: build
-        run: make all
+        run: make -C philo/ all
