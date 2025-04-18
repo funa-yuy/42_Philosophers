@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:27:05 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/17 15:31:13 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/18 09:18:54 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	cleanup_resources(t_univ_rules *rules, t_thread_arg *arg, \
 	free(arg);
 }
 
-void	mulch_thread(t_univ_rules rules)
+void	lets_go_mulch_thread(t_univ_rules rules)
 {
 	t_thread_arg	*arg;
 	pthread_mutex_t	*forks;
