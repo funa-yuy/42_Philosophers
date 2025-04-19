@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:27:05 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/19 18:54:22 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/19 20:48:08 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,39 +42,16 @@ int	setup_thread_resources(t_univ_rules rules, t_thread_arg	**arg, pthread_mutex
 	return (0);
 }
 
-void	print_one_die_judge(t_die_judge *judge)
-{
-	printf("=== die_judge 情報 ===\n");
-	printf("last_eat_time   :\n");
-	for (int i = 0; i < judge->u_rules.total_philo; i++)
-	{
-		printf("  [%d] %ld (addr: %p)\n", i, judge->last_eat_time[i], (void *)&judge->last_eat_time[i]);
-	}
-
-	printf("is_philo_die    : %s (addr: %p)\n",
-		*(judge->is_philo_die) ? "true" : "false",
-		(void *)judge->is_philo_die);
-}
-
-void	init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, long *last_eat_time, bool *is_philo_die)
-{
-	die_judge->u_rules = rules;
-	die_judge->last_eat_time = last_eat_time;
-	die_judge->is_philo_die = is_philo_die;
-
-	print_one_die_judge(die_judge);
-}
-
-
 int	create_philosopher_threads(t_univ_rules *rules, t_thread_arg *arg, pthread_mutex_t *forks, \
 								long start_tv_ms, long *last_eat_time, bool *is_philo_die)
 {
 	int			i;
 	int			s;
 	t_die_judge	die_judge;
+	void		*j_retval;
 
-	i = 0;
 	init_die_judge(&die_judge, *rules, last_eat_time, is_philo_die);
+	i = 0;
 	while (rules->total_philo > i)
 	{
 		last_eat_time[i] = -1;
@@ -89,6 +66,21 @@ int	create_philosopher_threads(t_univ_rules *rules, t_thread_arg *arg, pthread_m
 		}
 		i++;
 	}
+	s = pthread_create(&die_judge.thread_id, NULL, \
+		judgement_philo_dead, &die_judge);
+	if (s != 0)
+	{
+		printf("pthread_create: %s\n", strerror(s));
+		return (-1);
+	}
+
+	s = pthread_join(die_judge.thread_id, &j_retval);
+	if (s != 0)
+	{
+		printf("pthread_join: %s\n", strerror(s));
+		return (-1);
+	}
+
 	return (0);
 }
 
