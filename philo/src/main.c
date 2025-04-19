@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/19 18:34:04 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/19 18:53:31 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,13 @@ void	put_forks(t_thread_arg *philo)
 
 void	*action_philosophers(void *arg)
 {
-	t_thread_arg	*data;
+	(void) arg;
+	// t_thread_arg	*data;
 	// t_univ_rules	rules;
 	// struct timeval	tv;
 	// long			last_tv_ms;
 
-	data = (t_thread_arg *)arg;
+	// data = (t_thread_arg *)arg;
 	// rules = data->u_rules;
 	// while (1)
 	// {
