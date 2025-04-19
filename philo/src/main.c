@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/19 21:13:46 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/19 22:03:53 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ void	*action_philosophers(void *arg)
 		last_tv_ms = printf_philo_status("is thinking", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 		if (*data->is_philo_die)
 			break ;
+		//data->must_eat回数がfullになったらboolをtureにする
 	}
 	return (NULL);
 }
