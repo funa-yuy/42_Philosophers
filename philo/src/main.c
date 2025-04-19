@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/19 22:03:53 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/19 22:29:04 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,59 +49,35 @@ void	*judgement_philo_dead(void *arg)
 
 void	put_forks(t_thread_arg *philo)
 {
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->first_fork);
+	pthread_mutex_unlock(philo->second_fork);
 }
 
 void	take_forks(t_thread_arg *philo)
 {
 	if (*philo->is_philo_die)
 		return ;
-	if (philo->philo_id % 2 == 0)
+	printf("%d: philo->first_fork = %d待ち\n", philo->philo_id + 1, philo->first_fork_n);
+	pthread_mutex_lock(philo->first_fork);
+	if (*philo->is_philo_die)
 	{
-		printf("%d: philo->right_fork = %d待ち\n", philo->philo_id + 1, philo->right_fork_n);
-		pthread_mutex_lock(philo->right_fork);
-		if (*philo->is_philo_die)
-		{
-			put_forks(philo);
-			return ;
-		}
-		printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
-
-		printf("%d: philo->left_fork = %d待ち\n", philo->philo_id + 1, philo->left_fork_n);
-		pthread_mutex_lock(philo->left_fork);
-		if (*philo->is_philo_die)
-		{
-			put_forks(philo);
-			return ;
-		}
-		printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
+		put_forks(philo);
+		return ;
 	}
-	else
+	printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
+
+	printf("%d: philo->second_fork = %d待ち\n", philo->philo_id + 1, philo->second_fork_n);
+	pthread_mutex_lock(philo->second_fork);
+	if (*philo->is_philo_die)
 	{
-		printf("%d: philo->left_fork = %d待ち\n", philo->philo_id + 1, philo->left_fork_n);
-		pthread_mutex_lock(philo->left_fork);
-		if (*philo->is_philo_die)
-		{
-			put_forks(philo);
-			return ;
-		}
-		printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
-
-		printf("%d: philo->right_fork = %d待ち\n", philo->philo_id + 1, philo->right_fork_n);
-		pthread_mutex_lock(philo->right_fork);
-		if (*philo->is_philo_die)
-		{
-			put_forks(philo);
-			return ;
-		}
-		printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
+		put_forks(philo);
+		return ;
 	}
+	printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
 }
 
 void	*action_philosophers(void *arg)
 {
-	(void) arg;
 	t_thread_arg	*data;
 	t_univ_rules	rules;
 	struct timeval	tv;
