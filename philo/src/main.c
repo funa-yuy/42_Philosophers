@@ -6,38 +6,48 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 16:00:08 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 18:37:41 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
+bool	did_someone_die(int philo_id, t_die_judge *data)
+{
+	long	now_ms;
+	int		time_die;
+
+	time_die = data->u_rules.time_die;
+	if (data->last_eat_time[philo_id] != -1)
+	{
+		now_ms = get_now_time_ms();
+		if (now_ms - data->last_eat_time[philo_id] >= time_die)
+		{
+			printf("ジャッジ関数%d : 今: %ld , 最後の食事 %ld, 差分 %ld die %d\n", philo_id + 1, now_ms, data->last_eat_time[philo_id], now_ms - data->last_eat_time[philo_id], time_die);
+			printf_philo_status("died", now_ms, philo_id + 1, 0);
+			return (true);
+		}
+	}
+	return (false);
+}
+
 void	*judgement_philo_dead(void *arg)
 {
 	t_die_judge		*data;
-	int				time_die;
 	int				total_philo;
 	int				i;
-	long			now_ms;
 
 	data = (t_die_judge *)arg;
-	time_die = data->u_rules.time_die;
 	total_philo = data->u_rules.total_philo;
 	while (!*data->is_philo_die)
 	{
 		i = 0;
 		while (i < total_philo)
 		{
-			if (data->last_eat_time[i] != -1)
+			if (did_someone_die(i, data))
 			{
-				now_ms = get_now_time_ms();
-				if (now_ms - data->last_eat_time[i] >= time_die)
-				{
-					*data->is_philo_die = true;
-					printf("ジャッジ関数%d : 今: %ld , 最後の食事 %ld, 差分 %ld die %d\n", i + 1, now_ms,  data->last_eat_time[i], now_ms - data->last_eat_time[i], time_die);
-					printf_philo_status("died", now_ms, i + 1, 0);
-					break ;
-				}
+				*data->is_philo_die = true;
+				return (NULL);
 			}
 			i++;
 		}
