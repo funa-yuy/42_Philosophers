@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/19 22:54:48 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 11:54:15 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,15 @@ typedef struct s_die_judge
 	bool			*is_philo_die;
 	t_univ_rules	u_rules;
 }	t_die_judge;
+
+typedef struct s_share_data
+{
+	t_thread_arg	*arg;
+	pthread_mutex_t	*forks;
+	long			*last_eat_time;
+	bool			*is_philo_die;
+	t_univ_rules	u_rules;
+}	t_share_data;
 
 
 /* function */
