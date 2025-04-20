@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 14:17:38 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 19:41:56 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,18 @@ typedef struct s_thread_arg
 	int				second_fork_n;
 	long			start_tv_ms;
 	long			*last_eat_time;
-	bool			*is_philo_die;
+	bool			*can_stop_thread;
+	bool			*is_eat_full;
 	t_univ_rules	u_rules;
 }	t_thread_arg;
 
 typedef struct s_die_judge
 {
 	pthread_t		thread_id;
+	long			start_tv_ms;
 	long			*last_eat_time;
-	bool			*is_philo_die;
+	bool			*can_stop_thread;
+	bool			*is_eat_full;
 	t_univ_rules	u_rules;
 }	t_die_judge;
 
@@ -64,7 +67,8 @@ typedef struct s_share_data
 	t_thread_arg	*arg;
 	pthread_mutex_t	*forks;
 	long			*last_eat_time;
-	bool			*is_philo_die;
+	bool			*can_stop_thread;
+	bool			*is_eat_full;
 	t_univ_rules	u_rules;
 }	t_share_data;
 
@@ -78,10 +82,11 @@ int				setup_thread_resources(t_univ_rules rules, \
 void			init_thread_arg(t_univ_rules rules, t_share_data *s_data, \
 								long start_tv_ms);
 void			init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, \
-								t_share_data *s_data);
+								t_share_data *s_data, long start_tv_ms);
 void			mulch_thread(t_univ_rules rules);
 void			*action_philosophers(void *arg);
-void			*judgement_philo_dead(void *arg);
+void			*judgement_stop_thread(void *arg);
 long			get_now_time_ms(void);
+void			*judgement_stop_thread(void *arg);
 
 #endif

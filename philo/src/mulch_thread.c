@@ -19,7 +19,7 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 	int			s;
 
 	s = pthread_create(&die_judge->thread_id, NULL, \
-		judgement_philo_dead, die_judge);
+		judgement_stop_thread, die_judge);
 	if (s != 0)
 	{
 		printf("pthread_create: %s\n", strerror(s));
@@ -82,7 +82,8 @@ void	cleanup_resources(int total_philo, t_share_data *s_data)
 	free(s_data->forks);
 	free(s_data->arg);
 	free(s_data->last_eat_time);
-	free(s_data->is_philo_die);
+	free(s_data->can_stop_thread);
+	free(s_data->is_eat_full);
 }
 
 void	mulch_thread(t_univ_rules rules)
