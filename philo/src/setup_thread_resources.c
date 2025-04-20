@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:10:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 18:06:40 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 18:46:22 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
 	}
 	start_tv_ms = get_now_time_ms();
 	init_thread_arg(rules, s_data, start_tv_ms);
-	init_die_judge(die_judge, rules, s_data);
+	init_die_judge(die_judge, rules, s_data, start_tv_ms);
 	return (0);
 }

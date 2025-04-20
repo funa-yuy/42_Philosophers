@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 18:37:41 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 18:55:52 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ bool	did_someone_die(int philo_id, t_die_judge *data)
 		now_ms = get_now_time_ms();
 		if (now_ms - data->last_eat_time[philo_id] >= time_die)
 		{
-			printf("ジャッジ関数%d : 今: %ld , 最後の食事 %ld, 差分 %ld die %d\n", philo_id + 1, now_ms, data->last_eat_time[philo_id], now_ms - data->last_eat_time[philo_id], time_die);
-			printf_philo_status("died", now_ms, philo_id + 1, 0);
+			printf("ジャッジ関数%d : 今: %ld , 最後の食事 %ld, スタートから %ldms, die %d\n", philo_id + 1, now_ms, data->last_eat_time[philo_id], now_ms - data->start_tv_ms, time_die);
+			printf_philo_status("died", data->start_tv_ms, philo_id + 1, data->last_eat_time[philo_id]);
 			return (true);
 		}
 	}
@@ -88,7 +88,6 @@ void	*action_philosophers(void *arg)
 {
 	t_thread_arg	*data;
 	t_univ_rules	rules;
-	struct timeval	tv;
 	long			last_tv_ms;
 
 	data = (t_thread_arg *)arg;
@@ -96,8 +95,7 @@ void	*action_philosophers(void *arg)
 	while (!*data->is_philo_die)
 	{
 		take_forks(data);
-		gettimeofday(&tv, NULL);
-		last_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
+		last_tv_ms = get_now_time_ms();
 		if (*data->is_philo_die)
 		{
 			put_forks(data);
@@ -141,14 +139,13 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	rules = init_univ_rules(argc, argv);
-
+	printf("-----------------\n");
 	printf("Philosophers: %d\n", rules.total_philo);
 	printf("Time to die: %d\n", rules.time_die);
 	printf("Time to eat: %d\n", rules.time_eat);
 	printf("Time to sleep: %d\n", rules.time_sleep);
 	printf("Each must eat: %d\n", rules.must_eat);
-
+	printf("-----------------\n");
 	mulch_thread(rules);
-
 	return (0);
 }
