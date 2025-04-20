@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 19:13:43 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 19:31:58 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,11 @@ void	*action_philosophers(void *arg)
 	t_thread_arg	*data;
 	t_univ_rules	rules;
 	long			last_tv_ms;
+	int				eat_num;
 
 	data = (t_thread_arg *)arg;
 	rules = data->u_rules;
+	eat_num = 0;
 	while (!*data->is_philo_die)
 	{
 		take_forks(data);
@@ -120,6 +122,9 @@ void	*action_philosophers(void *arg)
 			put_forks(data);
 			break ;
 		}
+		if (++eat_num >= rules.must_eat && rules.must_eat != -1)
+			*data->is_eat_full = true;
+		printf("%d : eat_num = %d\n", data->philo_id + 1, eat_num);
 		put_forks(data);
 
 		if (*data->is_philo_die)
