@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 11:54:15 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 12:14:34 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,16 @@ typedef struct s_share_data
 	t_univ_rules	u_rules;
 }	t_share_data;
 
-
 /* function */
 t_univ_rules	init_univ_rules(int argc, char *argv[]);
 long			printf_philo_status(char *status, long s_time, int n_philo, \
 									long last_time);
-// void			init_thread_arg(t_thread_arg *arg, int id, t_univ_rules rules, pthread_mutex_t *forks, \
-// 								long start_tv_ms, long *last_eat_time, bool *is_philo_die);
-void			init_thread_arg(t_thread_arg *arg, int id, t_univ_rules rules, pthread_mutex_t *forks, \
-						long start_tv_ms, long *last_eat_time, bool *is_philo_die);
+void			init_thread_arg(t_univ_rules rules, t_share_data *s_data, long start_tv_ms);
 void			init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, \
 								long *last_eat_time, bool *is_philo_die);
 void			lets_go_mulch_thread(t_univ_rules rules);
 void			*action_philosophers(void *arg);
 void			*judgement_philo_dead(void *arg);
+long			get_now_time_ms(void);
 
 #endif

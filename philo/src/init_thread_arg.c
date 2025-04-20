@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 20:32:11 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 11:54:38 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 12:13:46 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,28 +26,36 @@ void	print_one_thread_arg(t_thread_arg *arg)
 	printf("----------------------\n");
 }
 
-void	init_thread_arg(t_thread_arg *arg, int id, t_univ_rules rules, pthread_mutex_t *forks, \
-						long start_tv_ms, long *last_eat_time, bool *is_philo_die)
+void	init_thread_arg(t_univ_rules rules, t_share_data *s_data, long start_tv_ms)
 {
-	printf("id = %d\n", id);
-	if (rules.total_philo % 2 == 0)
+	int				i;
+	t_thread_arg	*arg;
+
+	arg = s_data->arg;
+	i = 0;
+	while (rules.total_philo > i)
 	{
-		arg->first_fork = &forks[id];
-		arg->second_fork = &forks[(id + 1) % rules.total_philo];
-		arg->first_fork_n = id;
-		arg->second_fork_n = (id + 1) % rules.total_philo;
+		printf("id = %d\n", i);
+		if (rules.total_philo % 2 == 0)
+		{
+			arg[i].first_fork = &s_data->forks[i];
+			arg[i].second_fork = &s_data->forks[(i + 1) % rules.total_philo];
+			arg[i].first_fork_n = i;
+			arg[i].second_fork_n = (i + 1) % rules.total_philo;
+		}
+		else
+		{
+			arg[i].first_fork = &s_data->forks[(i + 1) % rules.total_philo];
+			arg[i].second_fork = &s_data->forks[i];
+			arg[i].first_fork_n = (i + 1) % rules.total_philo;
+			arg[i].second_fork_n = i;
+		}
+		arg[i].philo_id = i;
+		arg[i].u_rules = rules;
+		arg[i].start_tv_ms = start_tv_ms;
+		arg[i].last_eat_time = &s_data->last_eat_time[i];
+		arg[i].is_philo_die = s_data->is_philo_die;
+		print_one_thread_arg(&arg[i]);
+		i++;
 	}
-	else
-	{
-		arg->first_fork = &forks[(id + 1) % rules.total_philo];
-		arg->second_fork = &forks[id];
-		arg->first_fork_n = (id + 1) % rules.total_philo;
-		arg->second_fork_n = id;
-	}
-	arg->philo_id = id;
-	arg->u_rules = rules;
-	arg->start_tv_ms = start_tv_ms;
-	arg->last_eat_time = &last_eat_time[id];
-	arg->is_philo_die = is_philo_die;
-	print_one_thread_arg(arg);
 }
