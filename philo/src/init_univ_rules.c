@@ -6,11 +6,22 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:27:06 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/15 18:27:13 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 23:14:14 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+// void	print_niv_rules(t_univ_rules rules)
+// {
+// 	printf("--- rules 情報 ---\n");
+// 	printf("Philosophers: %d\n", rules.total_philo);
+// 	printf("Time to die: %d\n", rules.time_die);
+// 	printf("Time to eat: %d\n", rules.time_eat);
+// 	printf("Time to sleep: %d\n", rules.time_sleep);
+// 	printf("Each must eat: %d\n", rules.must_eat);
+// 	printf("-----------------\n");
+// }
 
 t_univ_rules	init_univ_rules(int argc, char *argv[])
 {
@@ -24,5 +35,6 @@ t_univ_rules	init_univ_rules(int argc, char *argv[])
 		rules.must_eat = atoi(argv[5]);
 	else
 		rules.must_eat = -1;
+	// print_niv_rules(rules);
 	return (rules);
 }

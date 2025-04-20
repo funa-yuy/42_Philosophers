@@ -28,7 +28,7 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 	i = 0;
 	while (rules->total_philo > i)
 	{
-		printf("thread%dを作成 \n", i);
+		// printf("thread%dを作成 \n", i);
 		s = pthread_create(&s_data->arg[i].thread_id, NULL, \
 							action_philosophers, &s_data->arg[i]);
 		if (s != 0)
