@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:27:05 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 14:00:02 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 14:09:02 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	allocate_memory(int total_philo, t_share_data *s_data)
 	return (0);
 }
 
-int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data)
+int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
+							t_die_judge *die_judge)
 {
 	int				i;
 	long			start_tv_ms;
@@ -52,17 +53,17 @@ int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data)
 	*s_data->is_philo_die = false;
 	start_tv_ms = get_now_time_ms();
 	init_thread_arg(rules, s_data, start_tv_ms);
+	init_die_judge(die_judge, rules, s_data);
 	return (0);
 }
 
-int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data)
+int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
+								t_die_judge *die_judge)
 {
 	int			i;
 	int			s;
-	t_die_judge	die_judge;
 	void		*j_retval;
 
-	init_die_judge(&die_judge, *rules, s_data->last_eat_time, s_data->is_philo_die);
 	i = 0;
 	while (rules->total_philo > i)
 	{
@@ -76,14 +77,14 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data)
 		}
 		i++;
 	}
-	s = pthread_create(&die_judge.thread_id, NULL, \
-		judgement_philo_dead, &die_judge);
+	s = pthread_create(&die_judge->thread_id, NULL, \
+						judgement_philo_dead, &die_judge);
 	if (s != 0)
 	{
 		printf("pthread_create: %s\n", strerror(s));
 		return (-1);
 	}
-	s = pthread_join(die_judge.thread_id, &j_retval);
+	s = pthread_join(die_judge->thread_id, &j_retval);
 	if (s != 0)
 	{
 		printf("pthread_join: %s\n", strerror(s));
@@ -131,10 +132,11 @@ void	cleanup_resources(int total_philo, t_share_data *s_data)
 void	lets_go_mulch_thread(t_univ_rules rules)
 {
 	t_share_data	s_data;
+	t_die_judge		die_judge;
 
-	if (setup_thread_resources(rules, &s_data) == -1)
+	if (setup_thread_resources(rules, &s_data, &die_judge) == -1)
 		return ;
-	if (create_philosopher_threads(&rules, &s_data) == -1)
+	if (create_philosopher_threads(&rules, &s_data, &die_judge) == -1)
 	{
 		cleanup_resources(rules.total_philo, &s_data);
 		return ;
