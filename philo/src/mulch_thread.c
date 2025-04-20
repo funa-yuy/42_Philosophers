@@ -83,6 +83,7 @@ void	cleanup_resources(int total_philo, t_share_data *s_data)
 	free(s_data->arg);
 	free(s_data->last_eat_time);
 	free(s_data->is_philo_die);
+	free(s_data->is_eat_full);
 }
 
 void	mulch_thread(t_univ_rules rules)

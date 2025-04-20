@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 19:35:53 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 14:03:25 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 18:16:20 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ void	print_one_die_judge(t_die_judge *judge)
 	printf("is_philo_die    : %s (addr: %p)\n",
 		*(judge->is_philo_die) ? "true" : "false",
 		(void *)judge->is_philo_die);
+	printf("is_eat_full   :\n");
+	for (int i = 0; i < judge->u_rules.total_philo; i++)
+	{
+		printf("  [%d] %s (addr: %p)\n", i, judge->is_eat_full[i] ? "true" : "false", (void *)&judge->is_eat_full[i]);
+	}
 	printf("----------------------\n");
 }
 
@@ -32,5 +37,6 @@ void	init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, \
 	die_judge->u_rules = rules;
 	die_judge->last_eat_time = s_data->last_eat_time;
 	die_judge->is_philo_die = s_data->is_philo_die;
+	die_judge->is_eat_full = s_data->is_eat_full;
 	print_one_die_judge(die_judge);
 }
