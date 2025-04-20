@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:10:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 18:46:22 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 19:04:07 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,11 @@ int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
 	while (rules.total_philo > i)
 	{
 		pthread_mutex_init(&s_data->forks[i], NULL);
-		i++;
-	}
-	i = 0;
-	while (rules.total_philo > i)
-	{
 		s_data->last_eat_time[i] = -1;
+		s_data->is_eat_full[i] = false;
 		i++;
 	}
 	*s_data->is_philo_die = false;
-	i = 0;
-	while (rules.total_philo > i)
-	{
-		s_data->is_philo_die[i] = false;
-		i++;
-	}
 	start_tv_ms = get_now_time_ms();
 	init_thread_arg(rules, s_data, start_tv_ms);
 	init_die_judge(die_judge, rules, s_data, start_tv_ms);

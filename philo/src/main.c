@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 18:55:52 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 19:13:43 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	*judgement_philo_dead(void *arg)
 {
 	t_die_judge		*data;
 	int				total_philo;
+	bool			stop_thread;
 	int				i;
 
 	data = (t_die_judge *)arg;
@@ -42,14 +43,23 @@ void	*judgement_philo_dead(void *arg)
 	while (!*data->is_philo_die)
 	{
 		i = 0;
+		stop_thread = true;
 		while (i < total_philo)
 		{
 			if (did_someone_die(i, data))
 			{
-				*data->is_philo_die = true;
-				return (NULL);
+				stop_thread = true;
+				break ;
 			}
+			if (!data->is_eat_full[i])
+				stop_thread = false;
 			i++;
+		}
+		if (stop_thread)
+		{
+			printf("\x1b[31m --stop_thread --  \x1b[39m\n");
+			*data->is_philo_die = true;
+			return (NULL);
 		}
 	}
 	return (NULL);
