@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 20:32:11 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 12:13:46 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 12:36:48 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,27 @@ void	print_one_thread_arg(t_thread_arg *arg)
 	printf("----------------------\n");
 }
 
-void	init_thread_arg(t_univ_rules rules, t_share_data *s_data, long start_tv_ms)
+void	assign_forks(t_thread_arg *arg, pthread_mutex_t *forks, \
+						int total_philo, int philo_pos)
+{
+	if (total_philo % 2 == 0)
+	{
+		arg->first_fork = &forks[philo_pos];
+		arg->second_fork = &forks[(philo_pos + 1) % total_philo];
+		arg->first_fork_n = philo_pos;
+		arg->second_fork_n = (philo_pos + 1) % total_philo;
+	}
+	else
+	{
+		arg->first_fork = &forks[(philo_pos + 1) % total_philo];
+		arg->second_fork = &forks[philo_pos];
+		arg->first_fork_n = (philo_pos + 1) % total_philo;
+		arg->second_fork_n = philo_pos;
+	}
+}
+
+void	init_thread_arg(t_univ_rules rules, t_share_data *s_data, \
+						long start_tv_ms)
 {
 	int				i;
 	t_thread_arg	*arg;
@@ -36,25 +56,12 @@ void	init_thread_arg(t_univ_rules rules, t_share_data *s_data, long start_tv_ms)
 	while (rules.total_philo > i)
 	{
 		printf("id = %d\n", i);
-		if (rules.total_philo % 2 == 0)
-		{
-			arg[i].first_fork = &s_data->forks[i];
-			arg[i].second_fork = &s_data->forks[(i + 1) % rules.total_philo];
-			arg[i].first_fork_n = i;
-			arg[i].second_fork_n = (i + 1) % rules.total_philo;
-		}
-		else
-		{
-			arg[i].first_fork = &s_data->forks[(i + 1) % rules.total_philo];
-			arg[i].second_fork = &s_data->forks[i];
-			arg[i].first_fork_n = (i + 1) % rules.total_philo;
-			arg[i].second_fork_n = i;
-		}
 		arg[i].philo_id = i;
 		arg[i].u_rules = rules;
 		arg[i].start_tv_ms = start_tv_ms;
 		arg[i].last_eat_time = &s_data->last_eat_time[i];
 		arg[i].is_philo_die = s_data->is_philo_die;
+		assign_forks(&arg[i], s_data->forks, rules.total_philo, i);
 		print_one_thread_arg(&arg[i]);
 		i++;
 	}

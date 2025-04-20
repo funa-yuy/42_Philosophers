@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 19:35:53 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/19 19:36:04 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 12:46:43 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,5 @@ void	init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, long *last_eat_t
 	die_judge->u_rules = rules;
 	die_judge->last_eat_time = last_eat_time;
 	die_judge->is_philo_die = is_philo_die;
-
 	print_one_die_judge(die_judge);
 }
