@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 20:32:11 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 21:13:04 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 23:40:25 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	init_thread_arg(t_univ_rules rules, t_share_data *s_data, \
 	i = 0;
 	while (rules.total_philo > i)
 	{
-		printf("id = %d\n", i);
 		arg[i].philo_id = i;
 		arg[i].u_rules = rules;
 		arg[i].start_tv_ms = start_tv_ms;

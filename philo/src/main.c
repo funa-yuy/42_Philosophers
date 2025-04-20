@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 23:14:28 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 23:41:27 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,22 @@ void	take_forks(t_thread_arg *philo)
 	printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
 }
 
+void	thinking_lag(t_univ_rules rules)
+{
+	long	t_eat_ms;
+	long	t_sleep_ms;
+	long	t_think;
+
+	if (rules.total_philo % 2 == 0)
+		return ;
+	t_eat_ms = rules.time_eat;
+	t_sleep_ms = rules.time_sleep;
+	t_think = t_eat_ms * 2 - t_sleep_ms;
+	if (t_think < 0)
+		t_think = 0;
+	usleep(t_think * 0.3 * UNIT_CONV);
+}
+
 void	*action_philosophers(void *arg)
 {
 	t_thread_arg	*data;
@@ -71,7 +87,6 @@ void	*action_philosophers(void *arg)
 		}
 		if (++eat_num >= rules.must_eat && rules.must_eat != -1)
 			*data->is_eat_full = true;
-		// printf("%d : eat_num = %d\n", data->philo_id + 1, eat_num);
 		put_forks(data);
 
 		if (*data->can_stop_thread)
@@ -86,7 +101,7 @@ void	*action_philosophers(void *arg)
 		last_tv_ms = printf_philo_status("is thinking", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 		if (*data->can_stop_thread)
 			break ;
-		//data->must_eat回数がfullになったらboolをtureにする
+		thinking_lag(rules);
 	}
 	return (NULL);
 }
