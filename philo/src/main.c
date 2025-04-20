@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 20:04:20 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 21:07:12 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	*action_philosophers(void *arg)
 		}
 		if (++eat_num >= rules.must_eat && rules.must_eat != -1)
 			*data->is_eat_full = true;
-		printf("%d : eat_num = %d\n", data->philo_id + 1, eat_num);
+		// printf("%d : eat_num = %d\n", data->philo_id + 1, eat_num);
 		put_forks(data);
 
 		if (*data->can_stop_thread)
@@ -101,13 +101,6 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	rules = init_univ_rules(argc, argv);
-	printf("-----------------\n");
-	printf("Philosophers: %d\n", rules.total_philo);
-	printf("Time to die: %d\n", rules.time_die);
-	printf("Time to eat: %d\n", rules.time_eat);
-	printf("Time to sleep: %d\n", rules.time_sleep);
-	printf("Each must eat: %d\n", rules.must_eat);
-	printf("-----------------\n");
 	mulch_thread(rules);
 	return (0);
 }
