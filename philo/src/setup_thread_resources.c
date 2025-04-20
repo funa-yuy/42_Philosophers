@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:10:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 19:04:07 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 19:39:32 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ static int	allocate_memory(int total_philo, t_share_data *s_data)
 	s_data->last_eat_time = malloc(total_philo * sizeof(long));
 	if (s_data->last_eat_time == NULL)
 		return (-1);
-	s_data->is_philo_die = malloc(sizeof(bool));
-	if (s_data->is_philo_die == NULL)
+	s_data->can_stop_thread = malloc(sizeof(bool));
+	if (s_data->can_stop_thread == NULL)
 		return (-1);
 	s_data->is_eat_full = malloc(total_philo * sizeof(bool));
-	if (s_data->is_philo_die == NULL)
+	if (s_data->can_stop_thread == NULL)
 		return (-1);
 	return (0);
 }
@@ -48,7 +48,7 @@ int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
 		s_data->is_eat_full[i] = false;
 		i++;
 	}
-	*s_data->is_philo_die = false;
+	*s_data->can_stop_thread = false;
 	start_tv_ms = get_now_time_ms();
 	init_thread_arg(rules, s_data, start_tv_ms);
 	init_die_judge(die_judge, rules, s_data, start_tv_ms);

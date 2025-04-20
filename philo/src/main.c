@@ -6,64 +6,11 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 19:31:58 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 20:04:20 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-bool	did_someone_die(int philo_id, t_die_judge *data)
-{
-	long	now_ms;
-	int		time_die;
-
-	time_die = data->u_rules.time_die;
-	if (data->last_eat_time[philo_id] != -1)
-	{
-		now_ms = get_now_time_ms();
-		if (now_ms - data->last_eat_time[philo_id] >= time_die)
-		{
-			printf("ジャッジ関数%d : 今: %ld , 最後の食事 %ld, スタートから %ldms, die %d\n", philo_id + 1, now_ms, data->last_eat_time[philo_id], now_ms - data->start_tv_ms, time_die);
-			printf_philo_status("died", data->start_tv_ms, philo_id + 1, data->last_eat_time[philo_id]);
-			return (true);
-		}
-	}
-	return (false);
-}
-
-void	*judgement_philo_dead(void *arg)
-{
-	t_die_judge		*data;
-	int				total_philo;
-	bool			stop_thread;
-	int				i;
-
-	data = (t_die_judge *)arg;
-	total_philo = data->u_rules.total_philo;
-	while (!*data->is_philo_die)
-	{
-		i = 0;
-		stop_thread = true;
-		while (i < total_philo)
-		{
-			if (did_someone_die(i, data))
-			{
-				stop_thread = true;
-				break ;
-			}
-			if (!data->is_eat_full[i])
-				stop_thread = false;
-			i++;
-		}
-		if (stop_thread)
-		{
-			printf("\x1b[31m --stop_thread --  \x1b[39m\n");
-			*data->is_philo_die = true;
-			return (NULL);
-		}
-	}
-	return (NULL);
-}
 
 void	put_forks(t_thread_arg *philo)
 {
@@ -73,11 +20,11 @@ void	put_forks(t_thread_arg *philo)
 
 void	take_forks(t_thread_arg *philo)
 {
-	if (*philo->is_philo_die)
+	if (*philo->can_stop_thread)
 		return ;
 	printf("%d: philo->first_fork = %d待ち\n", philo->philo_id + 1, philo->first_fork_n);
 	pthread_mutex_lock(philo->first_fork);
-	if (*philo->is_philo_die)
+	if (*philo->can_stop_thread)
 	{
 		put_forks(philo);
 		return ;
@@ -86,7 +33,7 @@ void	take_forks(t_thread_arg *philo)
 
 	printf("%d: philo->second_fork = %d待ち\n", philo->philo_id + 1, philo->second_fork_n);
 	pthread_mutex_lock(philo->second_fork);
-	if (*philo->is_philo_die)
+	if (*philo->can_stop_thread)
 	{
 		put_forks(philo);
 		return ;
@@ -104,11 +51,11 @@ void	*action_philosophers(void *arg)
 	data = (t_thread_arg *)arg;
 	rules = data->u_rules;
 	eat_num = 0;
-	while (!*data->is_philo_die)
+	while (!*data->can_stop_thread)
 	{
 		take_forks(data);
 		last_tv_ms = get_now_time_ms();
-		if (*data->is_philo_die)
+		if (*data->can_stop_thread)
 		{
 			put_forks(data);
 			break ;
@@ -117,7 +64,7 @@ void	*action_philosophers(void *arg)
 		last_tv_ms = printf_philo_status("is eating", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 		*data->last_eat_time = last_tv_ms;
 		usleep(rules.time_eat * UNIT_CONV);
-		if (*data->is_philo_die)
+		if (*data->can_stop_thread)
 		{
 			put_forks(data);
 			break ;
@@ -127,17 +74,17 @@ void	*action_philosophers(void *arg)
 		printf("%d : eat_num = %d\n", data->philo_id + 1, eat_num);
 		put_forks(data);
 
-		if (*data->is_philo_die)
+		if (*data->can_stop_thread)
 			break ;
 		/* eatが終わり、sleepを開始 */
 		last_tv_ms = printf_philo_status("is sleeping", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 		usleep(rules.time_sleep * UNIT_CONV);
 
-		if (*data->is_philo_die)
+		if (*data->can_stop_thread)
 			break ;
 		/* sleepが終わり、thinkingを開始 */
 		last_tv_ms = printf_philo_status("is thinking", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
-		if (*data->is_philo_die)
+		if (*data->can_stop_thread)
 			break ;
 		//data->must_eat回数がfullになったらboolをtureにする
 	}
