@@ -6,21 +6,21 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:27:05 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 12:45:04 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 14:00:02 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-int	allocate_memory(t_univ_rules *rules, t_share_data *s_data)
+int	allocate_memory(int total_philo, t_share_data *s_data)
 {
-	s_data->arg = malloc(rules->total_philo * sizeof(t_thread_arg));
+	s_data->arg = malloc(total_philo * sizeof(t_thread_arg));
 	if (s_data->arg == NULL)
 		return (-1);
-	s_data->forks = malloc(rules->total_philo * sizeof(pthread_mutex_t));
+	s_data->forks = malloc(total_philo * sizeof(pthread_mutex_t));
 	if (s_data->forks == NULL)
 		return (-1);
-	s_data->last_eat_time = malloc(rules->total_philo * sizeof(long));
+	s_data->last_eat_time = malloc(total_philo * sizeof(long));
 	if (s_data->last_eat_time == NULL)
 		return (-1);
 	s_data->is_philo_die = malloc(sizeof(bool));
@@ -30,14 +30,13 @@ int	allocate_memory(t_univ_rules *rules, t_share_data *s_data)
 	return (0);
 }
 
-int	setup_thread_resources(t_univ_rules rules, t_share_data	**data)
+int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data)
 {
 	int				i;
 	long			start_tv_ms;
-	t_share_data	*s_data;
 
-	s_data = *data;
-	allocate_memory(&rules, s_data);
+	if (allocate_memory(rules.total_philo, s_data) == -1)
+		return (-1);
 	i = 0;
 	while (rules.total_philo > i)
 	{
@@ -67,7 +66,6 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data)
 	i = 0;
 	while (rules->total_philo > i)
 	{
-		s_data->last_eat_time[i] = -1;
 		printf("thread%dを作成 \n", i);
 		s = pthread_create(&s_data->arg[i].thread_id, NULL, \
 							action_philosophers, &s_data->arg[i]);
@@ -94,14 +92,14 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data)
 	return (0);
 }
 
-int	wait_philosopher_threads(t_univ_rules rules, t_thread_arg *arg)
+int	wait_philosopher_threads(int total_philo, t_thread_arg *arg)
 {
 	void	*retval;
 	int		i;
 	int		s;
 
 	i = 0;
-	while (rules.total_philo > i)
+	while (total_philo > i)
 	{
 		s = pthread_join(arg[i].thread_id, &retval);
 		if (s != 0)
@@ -114,12 +112,12 @@ int	wait_philosopher_threads(t_univ_rules rules, t_thread_arg *arg)
 	return (0);
 }
 
-void	cleanup_resources(t_univ_rules *rules, t_share_data *s_data)
+void	cleanup_resources(int total_philo, t_share_data *s_data)
 {
 	int	i;
 
 	i = 0;
-	while (rules->total_philo > i)
+	while (total_philo > i)
 	{
 		pthread_mutex_destroy(&s_data->forks[i]);
 		i++;
@@ -132,19 +130,19 @@ void	cleanup_resources(t_univ_rules *rules, t_share_data *s_data)
 
 void	lets_go_mulch_thread(t_univ_rules rules)
 {
-	t_share_data	*s_data;
+	t_share_data	s_data;
 
 	if (setup_thread_resources(rules, &s_data) == -1)
 		return ;
-	if (create_philosopher_threads(&rules, s_data) == -1)
+	if (create_philosopher_threads(&rules, &s_data) == -1)
 	{
-		cleanup_resources(&rules, s_data);
+		cleanup_resources(rules.total_philo, &s_data);
 		return ;
 	}
-	if (wait_philosopher_threads(rules, s_data->arg) == -1)
+	if (wait_philosopher_threads(rules.total_philo, s_data.arg) == -1)
 	{
-		cleanup_resources(&rules, s_data);
+		cleanup_resources(rules.total_philo, &s_data);
 		return ;
 	}
-	cleanup_resources(&rules, s_data);
+	cleanup_resources(rules.total_philo, &s_data);
 }
