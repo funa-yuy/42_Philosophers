@@ -97,7 +97,8 @@ void	mulch_thread(t_univ_rules rules)
 		cleanup_resources(rules.total_philo, &s_data);
 		return ;
 	}
-	if (wait_philosopher_threads(rules.total_philo, s_data.arg, &die_judge) == -1)
+	if (wait_philosopher_threads(rules.total_philo, \
+								s_data.arg, &die_judge) == -1)
 	{
 		cleanup_resources(rules.total_philo, &s_data);
 		return ;

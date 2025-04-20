@@ -6,13 +6,14 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 19:28:46 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/19 19:39:58 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 16:02:28 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-long	printf_philo_status(char *status, long s_time, int n_philo, long last_time)
+long	printf_philo_status(char *status, long s_time, \
+							int n_philo, long last_time)
 {
 	struct timeval	tv;
 	long			now_ms;
