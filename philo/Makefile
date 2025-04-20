@@ -6,7 +6,7 @@
 #    By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 01:21:55 by miyuu             #+#    #+#              #
-#    Updated: 2025/04/19 19:36:46 by miyuu            ###   ########.fr        #
+#    Updated: 2025/04/20 14:17:38 by miyuu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,10 @@ SRC_FILES = main.c \
 			init_univ_rules.c \
 			printf_philo_status.c \
 			init_thread_arg.c \
-			lets_go_mulch_thread.c \
-			init_die_judge.c
+			mulch_thread.c \
+			init_die_judge.c \
+			get_now_time_ms.c \
+			setup_thread_resources.c
 
 # Header files
 HEADER = $(HEADER_DIR)/philo.h

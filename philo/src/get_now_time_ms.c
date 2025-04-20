@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printf_philo_status.c                              :+:      :+:    :+:   */
+/*   get_now_time_ms.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 19:28:46 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 16:02:28 by miyuu            ###   ########.fr       */
+/*   Created: 2025/04/20 12:14:00 by miyuu             #+#    #+#             */
+/*   Updated: 2025/04/20 12:14:19 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include <philo.h>
 
-long	printf_philo_status(char *status, long s_time, \
-							int n_philo, long last_time)
+long	get_now_time_ms(void)
 {
 	struct timeval	tv;
-	long			now_ms;
+	long			now_tv_ms;
 
 	gettimeofday(&tv, NULL);
-	now_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
-	printf(LOG_STATUS, now_ms - s_time, n_philo, status, now_ms - last_time);
-	return (now_ms);
+	now_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
+	return (now_tv_ms);
 }
