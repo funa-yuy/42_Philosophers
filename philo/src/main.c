@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/19 22:29:04 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 14:17:38 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	main(int argc, char *argv[])
 	printf("Time to sleep: %d\n", rules.time_sleep);
 	printf("Each must eat: %d\n", rules.must_eat);
 
-	lets_go_mulch_thread(rules);
+	mulch_thread(rules);
 
 	return (0);
 }

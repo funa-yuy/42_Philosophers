@@ -1,61 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lets_go_mulch_thread.c                             :+:      :+:    :+:   */
+/*   mulch_thread.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:27:05 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 14:09:02 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 14:13:31 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
-
-int	allocate_memory(int total_philo, t_share_data *s_data)
-{
-	s_data->arg = malloc(total_philo * sizeof(t_thread_arg));
-	if (s_data->arg == NULL)
-		return (-1);
-	s_data->forks = malloc(total_philo * sizeof(pthread_mutex_t));
-	if (s_data->forks == NULL)
-		return (-1);
-	s_data->last_eat_time = malloc(total_philo * sizeof(long));
-	if (s_data->last_eat_time == NULL)
-		return (-1);
-	s_data->is_philo_die = malloc(sizeof(bool));
-	if (s_data->is_philo_die == NULL)
-		return (-1);
-	*s_data->is_philo_die = false;
-	return (0);
-}
-
-int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
-							t_die_judge *die_judge)
-{
-	int				i;
-	long			start_tv_ms;
-
-	if (allocate_memory(rules.total_philo, s_data) == -1)
-		return (-1);
-	i = 0;
-	while (rules.total_philo > i)
-	{
-		pthread_mutex_init(&s_data->forks[i], NULL);
-		i++;
-	}
-	i = 0;
-	while (rules.total_philo > i)
-	{
-		s_data->last_eat_time[i] = -1;
-		i++;
-	}
-	*s_data->is_philo_die = false;
-	start_tv_ms = get_now_time_ms();
-	init_thread_arg(rules, s_data, start_tv_ms);
-	init_die_judge(die_judge, rules, s_data);
-	return (0);
-}
 
 int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 								t_die_judge *die_judge)
@@ -129,7 +84,7 @@ void	cleanup_resources(int total_philo, t_share_data *s_data)
 	free(s_data->is_philo_die);
 }
 
-void	lets_go_mulch_thread(t_univ_rules rules)
+void	mulch_thread(t_univ_rules rules)
 {
 	t_share_data	s_data;
 	t_die_judge		die_judge;
