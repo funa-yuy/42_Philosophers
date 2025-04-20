@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 21:07:12 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/20 23:14:28 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	take_forks(t_thread_arg *philo)
 {
 	if (*philo->can_stop_thread)
 		return ;
-	printf("%d: philo->first_fork = %d待ち\n", philo->philo_id + 1, philo->first_fork_n);
+	// printf("%d: philo->first_fork = %d待ち\n", philo->philo_id + 1, philo->first_fork_n);
 	pthread_mutex_lock(philo->first_fork);
 	if (*philo->can_stop_thread)
 	{
@@ -31,7 +31,7 @@ void	take_forks(t_thread_arg *philo)
 	}
 	printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
 
-	printf("%d: philo->second_fork = %d待ち\n", philo->philo_id + 1, philo->second_fork_n);
+	// printf("%d: philo->second_fork = %d待ち\n", philo->philo_id + 1, philo->second_fork_n);
 	pthread_mutex_lock(philo->second_fork);
 	if (*philo->can_stop_thread)
 	{
