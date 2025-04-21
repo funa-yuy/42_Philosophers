@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 15:23:03 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 15:33:22 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ typedef struct s_univ_rules
 {
 	int	total_philo;
 	int	time_die_ms;
-	int	time_eat_us;
-	int	time_sleep_us;
+	int	time_eat_ms;
+	int	time_sleep_ms;
 	int	must_eat;
 }	t_univ_rules;
 
