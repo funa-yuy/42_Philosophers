@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 15:59:26 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 16:04:08 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,7 @@ void	*action_philosophers(void *arg)
 		now_ms = printf_philo_status("is eating", *data->start_tv_ms, data->philo_id + 1, now_ms);
 		*data->last_eat_time = now_ms;
 		while (get_now_time_ms() - now_ms < rules.time_eat_ms)
-		{
 			usleep(rules.time_eat_ms);
-			// printf("eat_ms %d, diff: %ld\n", rules.time_eat_ms, get_now_time_ms() - now_ms);
-		}
-		// usleep(rules.time_eat_ms);
 		put_forks(data);
 
 		if (*data->can_stop_thread)
@@ -99,12 +95,8 @@ void	*action_philosophers(void *arg)
 			break ;
 		/* eatが終わり、sleepを開始 */
 		now_ms = printf_philo_status("is sleeping", *data->start_tv_ms, data->philo_id + 1, now_ms);
-		// usleep(rules.time_sleep_ms);
 		while (get_now_time_ms() - now_ms < rules.time_sleep_ms)
-		{
 			usleep(rules.time_sleep_ms);
-			// printf("eat_ms %d, diff: %ld\n", rules.time_sleep_ms, get_now_time_ms() - now_ms);
-		}
 
 		if (*data->can_stop_thread)
 			break ;
