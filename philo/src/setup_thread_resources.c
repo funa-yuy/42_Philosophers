@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_thread_resources.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:10:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 11:39:03 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 14:31:40 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
 		i++;
 	}
 	*s_data->start_tv_ms = 0;
-	// printf("start_tv_ms   : %ld (%p)\n", *s_data->start_tv_ms, (void *)s_data->start_tv_ms);
 	*s_data->can_stop_thread = false;
 	*s_data->can_start_eat = false;
 	init_thread_arg(rules, s_data);
