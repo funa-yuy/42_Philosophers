@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 23:41:27 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 12:01:46 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	take_forks(t_thread_arg *philo)
 		put_forks(philo);
 		return ;
 	}
-	printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
+	printf_philo_status("has taken a fork", *philo->start_tv_ms, philo->philo_id + 1, 0);
 
 	// printf("%d: philo->second_fork = %d待ち\n", philo->philo_id + 1, philo->second_fork_n);
 	pthread_mutex_lock(philo->second_fork);
@@ -38,7 +38,7 @@ void	take_forks(t_thread_arg *philo)
 		put_forks(philo);
 		return ;
 	}
-	printf_philo_status("has taken a fork", philo->start_tv_ms, philo->philo_id + 1, 0);
+	printf_philo_status("has taken a fork", *philo->start_tv_ms, philo->philo_id + 1, 0);
 }
 
 void	thinking_lag(t_univ_rules rules)
@@ -67,6 +67,9 @@ void	*action_philosophers(void *arg)
 	data = (t_thread_arg *)arg;
 	rules = data->u_rules;
 	eat_num = 0;
+	while (!*data->can_start_eat)
+		;
+	// printf("開始!%d, time: %ld\n", data->philo_id + 1, get_now_time_ms());
 	while (!*data->can_stop_thread)
 	{
 		take_forks(data);
@@ -77,7 +80,7 @@ void	*action_philosophers(void *arg)
 			break ;
 		}
 		/* eatを開始 */
-		last_tv_ms = printf_philo_status("is eating", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+		last_tv_ms = printf_philo_status("is eating", *data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 		*data->last_eat_time = last_tv_ms;
 		usleep(rules.time_eat * UNIT_CONV);
 		if (*data->can_stop_thread)
@@ -92,13 +95,13 @@ void	*action_philosophers(void *arg)
 		if (*data->can_stop_thread)
 			break ;
 		/* eatが終わり、sleepを開始 */
-		last_tv_ms = printf_philo_status("is sleeping", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+		last_tv_ms = printf_philo_status("is sleeping", *data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 		usleep(rules.time_sleep * UNIT_CONV);
 
 		if (*data->can_stop_thread)
 			break ;
 		/* sleepが終わり、thinkingを開始 */
-		last_tv_ms = printf_philo_status("is thinking", data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+		last_tv_ms = printf_philo_status("is thinking", *data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 		if (*data->can_stop_thread)
 			break ;
 		thinking_lag(rules);

@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 23:20:55 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 11:31:55 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ typedef struct s_thread_arg
 	/* TODO: 以下2つ、最終的に消す */
 	int				first_fork_n;
 	int				second_fork_n;
-	long			start_tv_ms;
+	long			*start_tv_ms;
 	long			*last_eat_time;
 	bool			*can_stop_thread;
+	bool			*can_start_eat;
 	bool			*is_eat_full;
 	t_univ_rules	u_rules;
 }	t_thread_arg;
@@ -56,9 +57,10 @@ typedef struct s_thread_arg
 typedef struct s_die_judge
 {
 	pthread_t		thread_id;
-	long			start_tv_ms;
+	long			*start_tv_ms;
 	long			*last_eat_time;
 	bool			*can_stop_thread;
+	bool			*can_start_eat;
 	bool			*is_eat_full;
 	t_univ_rules	u_rules;
 }	t_die_judge;
@@ -67,8 +69,10 @@ typedef struct s_share_data
 {
 	t_thread_arg	*arg;
 	pthread_mutex_t	*forks;
+	long			*start_tv_ms;
 	long			*last_eat_time;
 	bool			*can_stop_thread;
+	bool			*can_start_eat;
 	bool			*is_eat_full;
 	t_univ_rules	u_rules;
 }	t_share_data;
@@ -80,10 +84,9 @@ long			printf_philo_status(char *status, long s_time, int n_philo, \
 int				setup_thread_resources(t_univ_rules rules, \
 										t_share_data	*s_data, \
 										t_die_judge *die_judge);
-void			init_thread_arg(t_univ_rules rules, t_share_data *s_data, \
-								long start_tv_ms);
+void			init_thread_arg(t_univ_rules rules, t_share_data *s_data);
 void			init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, \
-								t_share_data *s_data, long start_tv_ms);
+								t_share_data *s_data);
 void			mulch_thread(t_univ_rules rules);
 void			*action_philosophers(void *arg);
 void			*judgement_stop_thread(void *arg);
