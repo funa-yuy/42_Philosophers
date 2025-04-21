@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 18:01:00 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 18:26:23 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,6 @@ long			get_now_time_ms(void);
 void			*judgement_stop_thread(void *arg);
 
 int				ft_atoi(const char *str);
+int				ft_isdigit(int c);
 
 #endif
