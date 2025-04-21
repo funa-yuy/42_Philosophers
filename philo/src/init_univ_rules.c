@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:27:06 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 18:35:32 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 19:35:30 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ bool	is_numeric_str(const char *str)
 	if (str == NULL || str[0] == '\0')
 		return (false);
 	i = 0;
+	if (str[0] == '+')
+		i++;
 	while (str[i])
 	{
 		if (ft_isdigit((unsigned char)str[i]) == 0)
