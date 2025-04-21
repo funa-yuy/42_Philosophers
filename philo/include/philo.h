@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 21:32:43 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 21:35:08 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ void			*action_philosophers(void *arg);
 void			*judgement_stop_thread(void *arg);
 long			get_now_time_ms(void);
 void			*judgement_stop_thread(void *arg);
+void			take_forks(t_thread_arg *philo, t_univ_rules rules);
+void			put_forks(t_thread_arg *philo);
 
 int				ft_atoi(const char *str);
 int				ft_isdigit(int c);
