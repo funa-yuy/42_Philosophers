@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 22:24:21 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 22:27:52 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 		put_forks(data);
 		return (-1);
 	}
-	printf_philo_status("is eating", *data->start_tv_ms, \
-							data->philo_id + 1, 0);
+	printf_philo_status("is eating", *data->start_tv_ms, data->philo_id + 1);
 	*data->last_eat_time = get_now_time_ms();
 	safe_usleep(rules.time_eat_ms);
 	put_forks(data);
@@ -32,13 +31,11 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 	return (0);
 }
 
-/* eatが終わり、sleepを開始 */
 int	action_sleep(t_thread_arg *data, t_univ_rules rules)
 {
 	if (*data->can_stop_thread)
 		return (-1);
-	printf_philo_status("is sleeping", *data->start_tv_ms, \
-							data->philo_id + 1, 0);
+	printf_philo_status("is sleeping", *data->start_tv_ms, data->philo_id + 1);
 	safe_usleep(rules.time_sleep_ms);
 	return (0);
 }
@@ -57,13 +54,11 @@ void	thinking_lag(t_univ_rules rules)
 	usleep(think_ms * 0.3 * UNIT_CONV);
 }
 
-/* sleepが終わり、thinkingを開始 */
 int	action_thinking(t_thread_arg *data, t_univ_rules rules)
 {
 	if (*data->can_stop_thread)
 		return (-1);
-	printf_philo_status("is thinking", *data->start_tv_ms, \
-							data->philo_id + 1, 0);
+	printf_philo_status("is thinking", *data->start_tv_ms, data->philo_id + 1);
 	if (*data->can_stop_thread)
 		return (-1);
 	if (rules.total_philo % 2 != 0)

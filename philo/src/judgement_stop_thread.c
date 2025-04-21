@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 20:43:49 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 22:27:19 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	did_someone_die(int philo_id, t_die_judge *data)
 	if (now_ms - data->last_eat_time[philo_id] >= time_die_ms)
 	{
 		// printf("ジャッジ関数%d : 今: %ld , 最後の食事 %ld, スタートから %ldms, die %d\n", philo_id + 1, now_ms, data->last_eat_time[philo_id], now_ms - *data->start_tv_ms, time_die_ms);
-		printf_philo_status("died", *data->start_tv_ms, philo_id + 1, data->last_eat_time[philo_id]);
+		printf_philo_status("died", *data->start_tv_ms, philo_id + 1);
 		return (true);
 	}
 	return (false);

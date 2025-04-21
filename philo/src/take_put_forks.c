@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:34:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 22:11:58 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 22:28:14 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	take_forks(t_thread_arg *philo, t_univ_rules rules)
 		put_forks(philo);
 		return ;
 	}
-	printf_philo_status("has taken a fork", *philo->start_tv_ms, philo->philo_id + 1, 0);
+	printf_philo_status("has taken a fork", *philo->start_tv_ms, \
+							philo->philo_id + 1);
 	if (rules.total_philo == 1)
 	{
 		safe_usleep(rules.time_die_ms);
@@ -45,5 +46,6 @@ void	take_forks(t_thread_arg *philo, t_univ_rules rules)
 		put_forks(philo);
 		return ;
 	}
-	printf_philo_status("has taken a fork", *philo->start_tv_ms, philo->philo_id + 1, 0);
+	printf_philo_status("has taken a fork", *philo->start_tv_ms, \
+							philo->philo_id + 1);
 }
