@@ -28,7 +28,6 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 	i = 0;
 	while (rules->total_philo > i)
 	{
-		// printf("thread%dを作成 \n", i);
 		s = pthread_create(&s_data->arg[i].thread_id, NULL, \
 							action_philosophers, &s_data->arg[i]);
 		if (s != 0)
@@ -38,6 +37,8 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 		}
 		i++;
 	}
+	*s_data->start_tv_ms = get_now_time_ms();
+	*s_data->can_start_eat = true;
 	return (0);
 }
 
@@ -79,11 +80,13 @@ void	cleanup_resources(int total_philo, t_share_data *s_data)
 		pthread_mutex_destroy(&s_data->forks[i]);
 		i++;
 	}
-	free(s_data->forks);
 	free(s_data->arg);
+	free(s_data->forks);
 	free(s_data->last_eat_time);
-	free(s_data->can_stop_thread);
 	free(s_data->is_eat_full);
+	free(s_data->start_tv_ms);
+	free(s_data->can_stop_thread);
+	free(s_data->can_start_eat);
 }
 
 void	mulch_thread(t_univ_rules rules)

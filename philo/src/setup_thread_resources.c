@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_thread_resources.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:10:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 19:39:32 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 14:31:40 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,17 @@ static int	allocate_memory(int total_philo, t_share_data *s_data)
 	s_data->last_eat_time = malloc(total_philo * sizeof(long));
 	if (s_data->last_eat_time == NULL)
 		return (-1);
+	s_data->is_eat_full = malloc(total_philo * sizeof(bool));
+	if (s_data->is_eat_full == NULL)
+		return (-1);
+	s_data->start_tv_ms = malloc(sizeof(long));
+	if (s_data->start_tv_ms == NULL)
+		return (-1);
 	s_data->can_stop_thread = malloc(sizeof(bool));
 	if (s_data->can_stop_thread == NULL)
 		return (-1);
-	s_data->is_eat_full = malloc(total_philo * sizeof(bool));
-	if (s_data->can_stop_thread == NULL)
+	s_data->can_start_eat = malloc(sizeof(bool));
+	if (s_data->can_start_eat == NULL)
 		return (-1);
 	return (0);
 }
@@ -36,7 +42,6 @@ int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
 							t_die_judge *die_judge)
 {
 	int				i;
-	long			start_tv_ms;
 
 	if (allocate_memory(rules.total_philo, s_data) == -1)
 		return (-1);
@@ -48,9 +53,10 @@ int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
 		s_data->is_eat_full[i] = false;
 		i++;
 	}
+	*s_data->start_tv_ms = 0;
 	*s_data->can_stop_thread = false;
-	start_tv_ms = get_now_time_ms();
-	init_thread_arg(rules, s_data, start_tv_ms);
-	init_die_judge(die_judge, rules, s_data, start_tv_ms);
+	*s_data->can_start_eat = false;
+	init_thread_arg(rules, s_data);
+	init_die_judge(die_judge, rules, s_data);
 	return (0);
 }
