@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 12:01:46 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 12:29:39 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,12 @@ void	*action_philosophers(void *arg)
 		last_tv_ms = printf_philo_status("is eating", *data->start_tv_ms, data->philo_id + 1, last_tv_ms);
 		*data->last_eat_time = last_tv_ms;
 		usleep(rules.time_eat * UNIT_CONV);
+		put_forks(data);
+
 		if (*data->can_stop_thread)
-		{
-			put_forks(data);
 			break ;
-		}
 		if (++eat_num >= rules.must_eat && rules.must_eat != -1)
 			*data->is_eat_full = true;
-		put_forks(data);
 
 		if (*data->can_stop_thread)
 			break ;
@@ -102,6 +100,7 @@ void	*action_philosophers(void *arg)
 			break ;
 		/* sleepが終わり、thinkingを開始 */
 		last_tv_ms = printf_philo_status("is thinking", *data->start_tv_ms, data->philo_id + 1, last_tv_ms);
+
 		if (*data->can_stop_thread)
 			break ;
 		thinking_lag(rules);
