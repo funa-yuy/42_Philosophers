@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 15:33:22 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 17:37:59 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,7 @@ void			*action_philosophers(void *arg);
 void			*judgement_stop_thread(void *arg);
 long			get_now_time_ms(void);
 void			*judgement_stop_thread(void *arg);
+
+int				ft_atoi(const char *str);
 
 #endif
