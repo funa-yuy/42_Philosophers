@@ -3,11 +3,15 @@
 ./philo 2147483647 410 200 200
 ./philo +2 410 200 200
 
-# 哲学者が1人
-./philo 1 410 200 200
-# 64 1 has taken a fork
-# 410 1 died
 
+## 生きる時もあれば死ぬ時もあった
+./philo 3 610 200 200
+
+# 確定で死ぬ
+## 哲学者が1人
+./philo 1 410 200 200
+	# 64 1 has taken a fork
+	# 410 1 died
 
 # 不正 "Invalid argument."
 ### 負の値
