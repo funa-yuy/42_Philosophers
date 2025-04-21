@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_thread_resources.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:10:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 14:31:40 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/21 20:33:58 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ int	setup_thread_resources(t_univ_rules rules, t_share_data	*s_data, \
 {
 	int				i;
 
-	if (allocate_memory(rules.total_philo, s_data) == -1)
+	if (allocate_memory(rules.total_philo, s_data) != 0)
 		return (-1);
 	i = 0;
 	while (rules.total_philo > i)
 	{
 		pthread_mutex_init(&s_data->forks[i], NULL);
-		s_data->last_eat_time[i] = -1;
+		s_data->last_eat_time[i] = 0;
 		s_data->is_eat_full[i] = false;
 		i++;
 	}
