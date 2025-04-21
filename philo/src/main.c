@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 15:34:57 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 15:59:26 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void	thinking_lag(t_univ_rules rules)
 	long	sleep_ms;
 	long	think_ms;
 
-	if (rules.total_philo % 2 == 0)
-		return ;
 	eat_ms = rules.time_eat_ms;
 	sleep_ms = rules.time_sleep_ms;
 	think_ms = eat_ms * 2 - sleep_ms;
@@ -70,6 +68,8 @@ void	*action_philosophers(void *arg)
 	while (!*data->can_start_eat)
 		;
 	// printf("開始!%d, time: %ld\n", data->philo_id + 1, get_now_time_ms());
+	if (data->philo_id % 2 == 0)
+		thinking_lag(rules);
 	while (!*data->can_stop_thread)
 	{
 		take_forks(data);
@@ -84,7 +84,7 @@ void	*action_philosophers(void *arg)
 		*data->last_eat_time = now_ms;
 		while (get_now_time_ms() - now_ms < rules.time_eat_ms)
 		{
-			usleep(rules.time_eat_ms * 10);
+			usleep(rules.time_eat_ms);
 			// printf("eat_ms %d, diff: %ld\n", rules.time_eat_ms, get_now_time_ms() - now_ms);
 		}
 		// usleep(rules.time_eat_ms);
@@ -102,7 +102,7 @@ void	*action_philosophers(void *arg)
 		// usleep(rules.time_sleep_ms);
 		while (get_now_time_ms() - now_ms < rules.time_sleep_ms)
 		{
-			usleep(rules.time_sleep_ms * 10);
+			usleep(rules.time_sleep_ms);
 			// printf("eat_ms %d, diff: %ld\n", rules.time_sleep_ms, get_now_time_ms() - now_ms);
 		}
 
@@ -113,7 +113,8 @@ void	*action_philosophers(void *arg)
 
 		if (*data->can_stop_thread)
 			break ;
-		thinking_lag(rules);
+		if (rules.total_philo % 2 != 0)
+			thinking_lag(rules);
 	}
 	return (NULL);
 }
