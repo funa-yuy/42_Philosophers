@@ -6,7 +6,7 @@
 #    By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 01:21:55 by miyuu             #+#    #+#              #
-#    Updated: 2025/04/21 18:30:01 by miyuu            ###   ########.fr        #
+#    Updated: 2025/04/21 21:33:07 by miyuu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ SRC_FILES = main.c \
 			setup_thread_resources.c \
 			judgement_stop_thread.c \
 			ft_atoi.c \
-			ft_isdigit.c
+			ft_isdigit.c \
+			utils.c
 
 # Header files
 HEADER = $(HEADER_DIR)/philo.h

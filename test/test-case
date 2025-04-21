@@ -3,7 +3,13 @@
 ./philo 2147483647 410 200 200
 ./philo +2 410 200 200
 
-# 不正
+# 哲学者が1人
+./philo 1 410 200 200
+# 64 1 has taken a fork
+# 410 1 died
+
+
+# 不正 "Invalid argument."
 ### 負の値
 ./philo 2 -410 200 200
 

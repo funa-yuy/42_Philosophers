@@ -6,11 +6,11 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 21:14:55 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 21:32:11 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include <philo.h>
 
 void	put_forks(t_thread_arg *philo)
 {
@@ -20,8 +20,6 @@ void	put_forks(t_thread_arg *philo)
 
 void	take_forks(t_thread_arg *philo, t_univ_rules rules)
 {
-	long	now_ms;
-
 	if (*philo->can_stop_thread)
 		return ;
 	// printf("%d: philo->first_fork = %d待ち\n", philo->philo_id + 1, philo->first_fork_n);
@@ -32,11 +30,9 @@ void	take_forks(t_thread_arg *philo, t_univ_rules rules)
 		return ;
 	}
 	printf_philo_status("has taken a fork", *philo->start_tv_ms, philo->philo_id + 1, 0);
-	now_ms = get_now_time_ms();
 	if (rules.total_philo == 1)
 	{
-		while (get_now_time_ms() - now_ms <= rules.time_die_ms)
-			usleep(rules.time_die_ms);
+		safe_usleep(rules.time_die_ms);
 		pthread_mutex_unlock(philo->first_fork);
 		return ;
 	}
@@ -91,8 +87,7 @@ void	*action_philosophers(void *arg)
 		/* eatを開始 */
 		now_ms = printf_philo_status("is eating", *data->start_tv_ms, data->philo_id + 1, now_ms);
 		*data->last_eat_time = now_ms;
-		while (get_now_time_ms() - now_ms <= rules.time_eat_ms)
-			usleep(rules.time_eat_ms);
+		safe_usleep(rules.time_eat_ms);
 		put_forks(data);
 
 		if (*data->can_stop_thread)
@@ -103,8 +98,7 @@ void	*action_philosophers(void *arg)
 			break ;
 		/* eatが終わり、sleepを開始 */
 		now_ms = printf_philo_status("is sleeping", *data->start_tv_ms, data->philo_id + 1, now_ms);
-		while (get_now_time_ms() - now_ms <= rules.time_sleep_ms)
-			usleep(rules.time_sleep_ms);
+		safe_usleep(rules.time_sleep_ms);
 
 		if (*data->can_stop_thread)
 			break ;
