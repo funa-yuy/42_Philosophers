@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 12:14:00 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/20 12:14:19 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 15:17:33 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 long	get_now_time_ms(void)
 {
 	struct timeval	tv;
-	long			now_tv_ms;
+	long			now_ms;
 
 	gettimeofday(&tv, NULL);
-	now_tv_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
-	return (now_tv_ms);
+	now_ms = tv.tv_sec * UNIT_CONV + tv.tv_usec / UNIT_CONV;
+	return (now_ms);
 }
