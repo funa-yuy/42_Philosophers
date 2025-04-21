@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 11:31:55 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 15:33:22 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@
 
 /* macro */
 # define UNIT_CONV 1000
-# define DEBUG_LOG_STATUS "\x1b[32m%ld\x1b[39m %d %s, diff: \x1b[32m%ld\x1b[39m\n"
+// # define DEBUG_LOG_STATUS "\x1b[32m%ld\x1b[39m %d %s, diff: \x1b[32m%ld\x1b[39m\n"
 # define LOG_STATUS "\x1b[32m%ld\x1b[39m %d %s\n"
 
 /* struct */
 typedef struct s_univ_rules
 {
 	int	total_philo;
-	int	time_die;
-	int	time_eat;
-	int	time_sleep;
+	int	time_die_ms;
+	int	time_eat_ms;
+	int	time_sleep_ms;
 	int	must_eat;
 }	t_univ_rules;
 
