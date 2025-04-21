@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 16:04:08 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 18:14:39 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ int	main(int argc, char *argv[])
 		printf("Invalid number of arguments.\n");
 		return (1);
 	}
-	rules = init_univ_rules(argc, argv);
-	mulch_thread(rules);
+	if (init_univ_rules(&rules, argc, argv) != 0)
+		return (1);
+	if (mulch_thread(rules) != 0)
+		return (1);
 	return (0);
 }

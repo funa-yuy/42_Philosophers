@@ -89,23 +89,24 @@ void	cleanup_resources(int total_philo, t_share_data *s_data)
 	free(s_data->can_start_eat);
 }
 
-void	mulch_thread(t_univ_rules rules)
+int	mulch_thread(t_univ_rules rules)
 {
 	t_share_data	s_data;
 	t_die_judge		die_judge;
 
-	if (setup_thread_resources(rules, &s_data, &die_judge) == -1)
-		return ;
-	if (create_philosopher_threads(&rules, &s_data, &die_judge) == -1)
+	if (setup_thread_resources(rules, &s_data, &die_judge) != 0)
+		return (-1);
+	if (create_philosopher_threads(&rules, &s_data, &die_judge) != 0)
 	{
 		cleanup_resources(rules.total_philo, &s_data);
-		return ;
+		return (-1);
 	}
 	if (wait_philosopher_threads(rules.total_philo, \
-								s_data.arg, &die_judge) == -1)
+								s_data.arg, &die_judge) != 0)
 	{
 		cleanup_resources(rules.total_philo, &s_data);
-		return ;
+		return (-1);
 	}
 	cleanup_resources(rules.total_philo, &s_data);
+	return (0);
 }

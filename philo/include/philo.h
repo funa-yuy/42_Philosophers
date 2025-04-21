@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 17:37:59 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 18:01:00 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct s_share_data
 }	t_share_data;
 
 /* function */
-t_univ_rules	init_univ_rules(int argc, char *argv[]);
+int				init_univ_rules(t_univ_rules *rules, int argc, char *argv[]);
 long			printf_philo_status(char *status, long s_time, int n_philo, \
 									long last_time);
 int				setup_thread_resources(t_univ_rules rules, \
@@ -87,7 +87,7 @@ int				setup_thread_resources(t_univ_rules rules, \
 void			init_thread_arg(t_univ_rules rules, t_share_data *s_data);
 void			init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, \
 								t_share_data *s_data);
-void			mulch_thread(t_univ_rules rules);
+int				mulch_thread(t_univ_rules rules);
 void			*action_philosophers(void *arg);
 void			*judgement_stop_thread(void *arg);
 long			get_now_time_ms(void);
