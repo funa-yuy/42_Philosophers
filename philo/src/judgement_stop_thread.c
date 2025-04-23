@@ -6,13 +6,13 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 20:43:49 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/23 20:18:57 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-bool	did_someone_die(int philo_id, t_die_judge *data)
+bool	did_someone_dead(int philo_id, t_die_judge *data)
 {
 	long	now_ms;
 	int		time_die_ms;
@@ -22,18 +22,37 @@ bool	did_someone_die(int philo_id, t_die_judge *data)
 	if (now_ms - data->last_eat_time[philo_id] >= time_die_ms)
 	{
 		// printf("ジャッジ関数%d : 今: %ld , 最後の食事 %ld, スタートから %ldms, die %d\n", philo_id + 1, now_ms, data->last_eat_time[philo_id], now_ms - *data->start_tv_ms, time_die_ms);
-		printf_philo_status("died", *data->start_tv_ms, philo_id + 1, data->last_eat_time[philo_id]);
+		printf_philo_status("died", *data->start_tv_ms, philo_id + 1);
 		return (true);
 	}
 	return (false);
+}
+
+bool	can_stop_philo_thread(t_die_judge *data, int total_philo)
+{
+	int		i;
+	bool	stop_thread;
+
+	i = 0;
+	stop_thread = true;
+	while (i < total_philo)
+	{
+		if (did_someone_dead(i, data))
+		{
+			return (true);
+			break ;
+		}
+		if (!data->is_eat_full[i])
+			stop_thread = false;
+		i++;
+	}
+	return (stop_thread);
 }
 
 void	*judgement_stop_thread(void *arg)
 {
 	t_die_judge		*data;
 	int				total_philo;
-	bool			stop_thread;
-	int				i;
 
 	data = (t_die_judge *)arg;
 	total_philo = data->u_rules.total_philo;
@@ -41,20 +60,7 @@ void	*judgement_stop_thread(void *arg)
 		;
 	while (!*data->can_stop_thread)
 	{
-		i = 0;
-		stop_thread = true;
-		while (i < total_philo)
-		{
-			if (did_someone_die(i, data))
-			{
-				stop_thread = true;
-				break ;
-			}
-			if (!data->is_eat_full[i])
-				stop_thread = false;
-			i++;
-		}
-		if (stop_thread)
+		if (can_stop_philo_thread(data, total_philo))
 		{
 			// printf("\x1b[31m --stop_thread --  \x1b[39m\n");
 			*data->can_stop_thread = true;

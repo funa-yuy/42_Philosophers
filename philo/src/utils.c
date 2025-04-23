@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 22:23:40 by miyuu            ###   ########.fr       */
+/*   Created: 2025/04/21 21:31:57 by miyuu             #+#    #+#             */
+/*   Updated: 2025/04/21 22:22:57 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-int	main(int argc, char *argv[])
+void	safe_usleep(int time_ms)
 {
-	t_univ_rules	rules;
+	long	now_ms;
 
-	if (argc > 6 || argc < 5)
-	{
-		printf("Invalid number of arguments.\n");
-		return (1);
-	}
-	if (init_univ_rules(&rules, argc, argv) != 0)
-		return (1);
-	if (mulch_thread(rules) != 0)
-		return (1);
-	return (0);
+	now_ms = get_now_time_ms();
+	while (get_now_time_ms() - now_ms <= time_ms)
+		usleep(time_ms);
 }
