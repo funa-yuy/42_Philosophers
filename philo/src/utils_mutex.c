@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils_mutex.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 19:57:59 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 22:23:40 by miyuu            ###   ########.fr       */
+/*   Created: 2025/04/23 21:10:00 by miyuu             #+#    #+#             */
+/*   Updated: 2025/04/23 21:12:41 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-int	main(int argc, char *argv[])
+void	set_bool_mutex(bool *b, pthread_mutex_t *m, bool val)
 {
-	t_univ_rules	rules;
-
-	if (argc > 6 || argc < 5)
-	{
-		printf("Invalid number of arguments.\n");
-		return (1);
-	}
-	if (init_univ_rules(&rules, argc, argv) != 0)
-		return (1);
-	if (mulch_thread(rules) != 0)
-		return (1);
-	return (0);
+	pthread_mutex_lock(m);
+	*b = val;
+	pthread_mutex_unlock(m);
 }
+
+bool	get_bool_mutex(bool b, pthread_mutex_t *m)
+{
+	bool	ret;
+
+	pthread_mutex_lock(m);
+	ret = b;
+	pthread_mutex_unlock(m);
+	return (ret);
+}
+

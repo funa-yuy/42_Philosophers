@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 19:35:53 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 12:35:44 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/23 20:52:17 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,6 @@ void	init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, \
 	die_judge->can_stop_thread = s_data->can_stop_thread;
 	die_judge->can_start_eat = s_data->can_start_eat;
 	die_judge->is_eat_full = s_data->is_eat_full;
+	die_judge->mutexes = s_data->mutexes;
 	// print_one_die_judge(die_judge);
 }

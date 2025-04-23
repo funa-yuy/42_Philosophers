@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 18:26:23 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/23 21:13:17 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,18 @@
 
 /* macro */
 # define UNIT_CONV 1000
-// # define DEBUG_LOG_STATUS "\x1b[32m%ld\x1b[39m %d %s, diff: \x1b[32m%ld\x1b[39m\n"
 # define LOG_STATUS "\x1b[32m%ld\x1b[39m %d %s\n"
 
 /* struct */
+typedef struct s_mutexes
+{
+	pthread_mutex_t	start_tv_mutex;
+	pthread_mutex_t	*last_eat_mutexes;
+	pthread_mutex_t	stop_thread_mutex;
+	pthread_mutex_t	start_eat_mutex;
+	pthread_mutex_t	*eat_full_mutexes;
+}	t_mutexes;
+
 typedef struct s_univ_rules
 {
 	int	total_philo;
@@ -51,6 +59,7 @@ typedef struct s_thread_arg
 	bool			*can_stop_thread;
 	bool			*can_start_eat;
 	bool			*is_eat_full;
+	t_mutexes		mutexes;
 	t_univ_rules	u_rules;
 }	t_thread_arg;
 
@@ -62,6 +71,7 @@ typedef struct s_die_judge
 	bool			*can_stop_thread;
 	bool			*can_start_eat;
 	bool			*is_eat_full;
+	t_mutexes		mutexes;
 	t_univ_rules	u_rules;
 }	t_die_judge;
 
@@ -74,13 +84,13 @@ typedef struct s_share_data
 	bool			*can_stop_thread;
 	bool			*can_start_eat;
 	bool			*is_eat_full;
+	t_mutexes		mutexes;
 	t_univ_rules	u_rules;
 }	t_share_data;
 
 /* function */
 int				init_univ_rules(t_univ_rules *rules, int argc, char *argv[]);
-long			printf_philo_status(char *status, long s_time, int n_philo, \
-									long last_time);
+long			printf_philo_status(char *status, long s_time, int n_philo);
 int				setup_thread_resources(t_univ_rules rules, \
 										t_share_data	*s_data, \
 										t_die_judge *die_judge);
@@ -92,8 +102,13 @@ void			*action_philosophers(void *arg);
 void			*judgement_stop_thread(void *arg);
 long			get_now_time_ms(void);
 void			*judgement_stop_thread(void *arg);
-
+void			take_forks(t_thread_arg *philo, t_univ_rules rules);
+void			put_forks(t_thread_arg *philo);
+void			*action_philosophers(void *arg);
 int				ft_atoi(const char *str);
 int				ft_isdigit(int c);
+void			safe_usleep(int time_ms);
+bool			get_bool_mutex(bool b, pthread_mutex_t *m);
+void			set_bool_mutex(bool *b, pthread_mutex_t *m, bool val);
 
 #endif

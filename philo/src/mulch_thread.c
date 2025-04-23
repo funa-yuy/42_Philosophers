@@ -12,6 +12,21 @@
 
 #include <philo.h>
 
+void	set_sdata_after_thread_create(t_share_data *s_data, int total_philo)
+{
+	int	i;
+
+	*s_data->start_tv_ms = get_now_time_ms();
+	i = 0;
+	while (total_philo > i)
+	{
+		s_data->last_eat_time[i] = *s_data->start_tv_ms;
+		i++;
+	}
+	set_bool_mutex(s_data->can_start_eat, \
+					&s_data->mutexes.start_eat_mutex, true);
+}
+
 int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 								t_die_judge *die_judge)
 {
@@ -37,15 +52,7 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 		}
 		i++;
 	}
-	*s_data->start_tv_ms = get_now_time_ms();
-	i = 0;
-	while (rules->total_philo > i)
-	{
-		s_data->last_eat_time[i] = *s_data->start_tv_ms;
-		i++;
-	}
-	s_data->last_eat_time[i] = 0;
-	*s_data->can_start_eat = true;
+	set_sdata_after_thread_create(s_data, rules->total_philo);
 	return (0);
 }
 
@@ -77,7 +84,7 @@ int	wait_philosopher_threads(int total_philo, t_thread_arg *arg, \
 	return (0);
 }
 
-void	cleanup_resources(int total_philo, t_share_data *s_data)
+void	destroy_mutexes(int total_philo, t_share_data *s_data)
 {
 	int	i;
 
@@ -87,6 +94,24 @@ void	cleanup_resources(int total_philo, t_share_data *s_data)
 		pthread_mutex_destroy(&s_data->forks[i]);
 		i++;
 	}
+	pthread_mutex_destroy(&s_data->mutexes.start_tv_mutex);
+	pthread_mutex_destroy(&s_data->mutexes.stop_thread_mutex);
+	pthread_mutex_destroy(&s_data->mutexes.start_eat_mutex);
+	i = 0;
+	while (i < total_philo)
+	{
+		pthread_mutex_destroy(&s_data->mutexes.last_eat_mutexes[i]);
+		pthread_mutex_destroy(&s_data->mutexes.eat_full_mutexes[i]);
+		i++;
+	}
+	free(s_data->mutexes.last_eat_mutexes);
+	free(s_data->mutexes.eat_full_mutexes);
+}
+
+
+void	cleanup_resources(int total_philo, t_share_data *s_data)
+{
+	destroy_mutexes(total_philo, s_data);
 	free(s_data->arg);
 	free(s_data->forks);
 	free(s_data->last_eat_time);
