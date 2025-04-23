@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 22:27:52 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/23 20:03:13 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 	*data->last_eat_time = get_now_time_ms();
 	safe_usleep(rules.time_eat_ms);
 	put_forks(data);
-	if (*data->can_stop_thread)
-		return (-1);
 	if (rules.must_eat != -1 && ++(*eat_num) >= rules.must_eat)
 		*data->is_eat_full = true;
 	return (0);
