@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/23 21:12:47 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/24 17:42:12 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,17 @@ void	*judgement_stop_thread(void *arg)
 
 	data = (t_die_judge *)arg;
 	total_philo = data->u_rules.total_philo;
-	while (!get_bool_mutex(*data->can_start_eat, &data->mutexes.start_eat_mutex))
+	while (!get_bool_mutex(*data->can_start_eat, \
+							&data->mutexes.start_eat_mutex))
 		;
-	while (!*data->can_stop_thread)
+	while (!get_bool_mutex(*data->can_stop_thread, \
+							&data->mutexes.stop_thread_mutex))
 	{
 		if (can_stop_philo_thread(data, total_philo))
 		{
 			// printf("\x1b[31m --stop_thread --  \x1b[39m\n");
-			*data->can_stop_thread = true;
+			set_bool_mutex(data->can_stop_thread, \
+							&data->mutexes.stop_thread_mutex, true);
 			return (NULL);
 		}
 	}

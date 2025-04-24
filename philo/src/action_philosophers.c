@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/23 21:13:50 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/24 17:38:19 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 {
 	take_forks(data, rules);
-	if (*data->can_stop_thread)
+	if (get_bool_mutex(*data->can_stop_thread, \
+						&data->mutexes.stop_thread_mutex))
 	{
 		put_forks(data);
 		return (-1);
@@ -31,7 +32,8 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 
 int	action_sleep(t_thread_arg *data, t_univ_rules rules)
 {
-	if (*data->can_stop_thread)
+	if (get_bool_mutex(*data->can_stop_thread, \
+						&data->mutexes.stop_thread_mutex))
 		return (-1);
 	printf_philo_status("is sleeping", *data->start_tv_ms, data->philo_id + 1);
 	safe_usleep(rules.time_sleep_ms);
@@ -54,10 +56,12 @@ void	thinking_lag(t_univ_rules rules)
 
 int	action_thinking(t_thread_arg *data, t_univ_rules rules)
 {
-	if (*data->can_stop_thread)
+	if (get_bool_mutex(*data->can_stop_thread, \
+						&data->mutexes.stop_thread_mutex))
 		return (-1);
 	printf_philo_status("is thinking", *data->start_tv_ms, data->philo_id + 1);
-	if (*data->can_stop_thread)
+	if (get_bool_mutex(*data->can_stop_thread, \
+						&data->mutexes.stop_thread_mutex))
 		return (-1);
 	if (rules.total_philo % 2 != 0)
 		thinking_lag(rules);
@@ -78,7 +82,8 @@ void	*action_philosophers(void *arg)
 		;
 	if (data->philo_id % 2 == 0)
 		thinking_lag(rules);
-	while (!*data->can_stop_thread)
+	while (!get_bool_mutex(*data->can_stop_thread, \
+							&data->mutexes.stop_thread_mutex))
 	{
 		if (action_eat(data, rules, &eat_num) != 0)
 			break ;
