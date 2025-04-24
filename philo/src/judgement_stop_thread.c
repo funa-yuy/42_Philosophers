@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   judgement_stop_thread.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/24 17:42:12 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/24 19:23:17 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,21 @@ bool	can_stop_philo_thread(t_die_judge *data, int total_philo)
 	return (stop_thread);
 }
 
+void	set_sdata_after_thread_create(t_die_judge *data, int total_philo)
+{
+	int	i;
+
+	*data->start_tv_ms = get_now_time_ms();
+	i = 0;
+	while (total_philo > i)
+	{
+		data->last_eat_time[i] = *data->start_tv_ms;
+		i++;
+	}
+	set_bool_mutex(data->can_start_eat, \
+					&data->mutexes.start_eat_mutex, true);
+}
+
 void	*judgement_stop_thread(void *arg)
 {
 	t_die_judge		*data;
@@ -56,9 +71,10 @@ void	*judgement_stop_thread(void *arg)
 
 	data = (t_die_judge *)arg;
 	total_philo = data->u_rules.total_philo;
+	set_sdata_after_thread_create(data, total_philo);
 	while (!get_bool_mutex(*data->can_start_eat, \
 							&data->mutexes.start_eat_mutex))
-		;
+		usleep(100);
 	while (!get_bool_mutex(*data->can_stop_thread, \
 							&data->mutexes.stop_thread_mutex))
 	{

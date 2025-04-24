@@ -12,34 +12,12 @@
 
 #include <philo.h>
 
-void	set_sdata_after_thread_create(t_share_data *s_data, int total_philo)
-{
-	int	i;
-
-	*s_data->start_tv_ms = get_now_time_ms();
-	i = 0;
-	while (total_philo > i)
-	{
-		s_data->last_eat_time[i] = *s_data->start_tv_ms;
-		i++;
-	}
-	set_bool_mutex(s_data->can_start_eat, \
-					&s_data->mutexes.start_eat_mutex, true);
-}
-
 int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 								t_die_judge *die_judge)
 {
 	int			i;
 	int			s;
 
-	s = pthread_create(&die_judge->thread_id, NULL, \
-		judgement_stop_thread, die_judge);
-	if (s != 0)
-	{
-		printf("pthread_create: %s\n", strerror(s));
-		return (-1);
-	}
 	i = 0;
 	while (rules->total_philo > i)
 	{
@@ -52,7 +30,13 @@ int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
 		}
 		i++;
 	}
-	set_sdata_after_thread_create(s_data, rules->total_philo);
+	s = pthread_create(&die_judge->thread_id, NULL, \
+		judgement_stop_thread, die_judge);
+	if (s != 0)
+	{
+		printf("pthread_create: %s\n", strerror(s));
+		return (-1);
+	}
 	return (0);
 }
 

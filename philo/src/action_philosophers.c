@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action_philosophers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/24 17:38:19 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/24 19:19:40 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	*action_philosophers(void *arg)
 	eat_num = 0;
 	while (!get_bool_mutex(*data->can_start_eat, \
 			&data->mutexes.start_eat_mutex))
-		;
+		usleep(100);
 	if (data->philo_id % 2 == 0)
 		thinking_lag(rules);
 	while (!get_bool_mutex(*data->can_stop_thread, \
