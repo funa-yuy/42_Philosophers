@@ -6,87 +6,79 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/26 16:40:15 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/26 20:20:10 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-// bool	did_someone_dead(int philo_id, t_die_judge *data)
-// {
-// 	long	now_ms;
-// 	int		time_die_ms;
+bool	did_someone_dead(int philo_id, t_thread_arg *data)
+{
+	long	now_ms;
+	int		time_die_ms;
 
-// 	time_die_ms = data->u_rules.time_die_ms;
-// 	now_ms = get_now_time_ms();
-// 	if (now_ms - data->last_eat_time[philo_id] >= time_die_ms)
-// 	{
-// 		// printf("ジャッジ関数%d : 今: %ld , 最後の食事 %ld, スタートから %ldms, die %d\n", philo_id + 1, now_ms, data->last_eat_time[philo_id], now_ms - *data->start_tv_ms, time_die_ms);
-// 		printf_philo_status("died", *data->start_tv_ms, philo_id + 1);
-// 		return (true);
-// 	}
-// 	return (false);
-// }
+	time_die_ms = data->u_rules.time_die_ms;
+	now_ms = get_now_time_ms();
+	if (now_ms - data[philo_id].last_eat_time >= time_die_ms)
+	{
+		printf_philo_status("died", *data->start_tv_ms, philo_id + 1);
+		return (true);
+	}
+	return (false);
+}
 
-// bool	can_stop_philo_thread(t_die_judge *data, int total_philo)
-// {
-// 	int		i;
-// 	bool	stop_thread;
+bool	can_stop_philo_thread(t_thread_arg *data, int total_philo)
+{
+	int		i;
+	bool	stop_thread;
 
-// 	i = 0;
-// 	stop_thread = true;
-// 	while (i < total_philo)
-// 	{
-// 		if (did_someone_dead(i, data))
-// 		{
-// 			return (true);
-// 			break ;
-// 		}
-// 		if (!data->is_eat_full[i])
-// 			stop_thread = false;
-// 		i++;
-// 	}
-// 	return (stop_thread);
-// }
+	i = 0;
+	stop_thread = true;
+	while (i < total_philo)
+	{
+		if (did_someone_dead(i, data))
+		{
+			return (true);
+			break ;
+		}
+		if (!data[i].is_eat_full)
+			stop_thread = false;
+		i++;
+	}
+	return (stop_thread);
+}
 
-// void	set_sdata_after_thread_create(t_die_judge *data, int total_philo)
-// {
-// 	int	i;
+void	set_sdata_after_thread_create(t_thread_arg *data, int total_philo)
+{
+	int	i;
 
-// 	*data->start_tv_ms = get_now_time_ms();
-// 	i = 0;
-// 	while (total_philo > i)
-// 	{
-// 		data->last_eat_time[i] = *data->start_tv_ms;
-// 		i++;
-// 	}
-// 	set_bool_mutex(data->can_start_eat, \
-// 					&data->mutexes.start_eat_mutex, true);
-// }
+	*data->start_tv_ms = get_now_time_ms();
+	i = 0;
+	while (total_philo > i)
+	{
+		data[i].last_eat_time = *data->start_tv_ms;
+		i++;
+	}
+	*data->can_start_eat = true;
+}
 
 void	*judgement_stop_thread(void *arg)
 {
 	t_thread_arg	*data;
-	// int				total_philo;
+	int				total_philo;
 
 	data = (t_thread_arg *)arg;
-	(void)data;
-	printf("judgement_stop_thread\n");
-	// total_philo = data->u_rules.total_philo;
-	// set_sdata_after_thread_create(data, total_philo);
-	// while (!get_bool_mutex(*data->can_start_eat, \
-	// 						&data->mutexes.start_eat_mutex))
-	// 	usleep(100);
-	// while (!get_bool_mutex(*data->can_stop_thread, \
-	// 						&data->mutexes.stop_thread_mutex))
-	// {
-	// 	if (can_stop_philo_thread(data, total_philo))
-	// 	{
-	// 		// printf("\x1b[31m --stop_thread --  \x1b[39m\n");
-	// 		set_bool_mutex(data->can_stop_thread, \
-	// 						&data->mutexes.stop_thread_mutex, true);
-	// 		return (NULL);
-	// 	}
-	// }
+	total_philo = data->u_rules.total_philo;
+	set_sdata_after_thread_create(data, total_philo);
+	while (!*data->can_start_eat)
+		usleep(100);
+	while (!*data->can_stop_thread)
+	{
+		if (can_stop_philo_thread(data, total_philo))
+		{
+			*data->can_stop_thread = true;
+			return (NULL);
+		}
+	}
 	return (NULL);
 }

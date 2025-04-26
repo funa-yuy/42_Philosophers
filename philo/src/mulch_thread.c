@@ -85,7 +85,6 @@ void	destroy_mutexes(int total_philo, pthread_mutex_t *forks, \
 	pthread_mutex_destroy(&mutex->write_mutex);
 }
 
-
 void	cleanup_resources(int total_philo, t_thread_arg *arg, \
 							pthread_mutex_t *forks, t_mutexs *shared_mutex)
 {
