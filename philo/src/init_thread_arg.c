@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 20:32:11 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/26 15:59:14 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/26 17:52:26 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ void	print_one_thread_arg(t_thread_arg *arg)
 	printf("start_tv_ms     : %ld (%p)\n", *arg->start_tv_ms, (void *)arg->start_tv_ms);
 	printf("can_stop_thread : %s (%p)\n", *arg->can_stop_thread ? "true" : "false", (void *)arg->can_stop_thread);
 	printf("can_start_eat   : %s (%p)\n", *arg->can_start_eat ? "true" : "false", (void *)arg->can_start_eat);
+	printf("mutex           : %p\n", (void *)arg->mutex);
+	printf("start_tv_mutex  : %p\n", (void *)&arg->mutex->start_tv_mutex);
+	printf("eat_mutex       : %p\n", (void *)&arg->mutex->eat_mutex);
+	printf("thread_mutex    : %p\n", (void *)&arg->mutex->thread_mutex);
+	printf("write_mutex     : %p\n", (void *)&arg->mutex->write_mutex);
 	printf("------------------------\n");
 }
 
