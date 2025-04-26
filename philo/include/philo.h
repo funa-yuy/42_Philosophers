@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/26 12:49:35 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/26 16:04:24 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_thread_arg
 	long			*start_tv_ms;//データ共有したい(judgement_stop_thread関数内で書き換えられたら、ほかのスレッドにも書き換えた内容を共有したい)
 	bool			*can_stop_thread;//データ共有したい(judgement_stop_thread関数内で書き換えられたら、ほかのスレッドにも書き換えた内容を共有したい)
 	bool			*can_start_eat;//データ共有したい(judgement_stop_thread関数内で書き換えられたら、ほかのスレッドにも書き換えた内容を共有したい)
-	t_mutexs			*mutex;//→中身t_mutex、データ共有したい。mutex_lock,unlockしたい
+	t_mutexs		*mutex;//→中身t_mutex、データ共有したい。mutex_lock,unlockしたい
 	t_univ_rules	u_rules;
 }	t_thread_arg;
 
@@ -64,7 +64,7 @@ typedef struct s_thread_arg
 int				init_univ_rules(t_univ_rules *rules, int argc, char *argv[]);
 long			printf_philo_status(char *status, long s_time, int n_philo);
 int				setup_thread_resources(t_univ_rules rules, t_thread_arg **arg, \
-										pthread_mutex_t **forks);
+										pthread_mutex_t **forks, t_mutexs *shared_mutex);
 void			init_thread_arg(t_thread_arg *arg, pthread_mutex_t *forks, \
 								t_mutexs *m, t_univ_rules rules);
 // void			init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, t_share_data *s_data);

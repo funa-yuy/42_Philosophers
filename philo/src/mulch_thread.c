@@ -12,36 +12,55 @@
 
 #include <philo.h>
 
-// int	create_philosopher_threads(t_univ_rules *rules, t_share_data *s_data, \
-// 								t_die_judge *die_judge)
-// {
-// 	int			i;
-// 	int			s;
+int	create_philosopher_threads(t_thread_arg *arg, int total_philo)
+{
+	int			i;
+	int			s;
+	pthread_t	judge_id;
+	void		*retval;
+	void		*j_retval;
 
-// 	i = 0;
-// 	while (rules->total_philo > i)
-// 	{
-// 		s = pthread_create(&s_data->arg[i].thread_id, NULL, \
-// 							action_philosophers, &s_data->arg[i]);
-// 		if (s != 0)
-// 		{
-// 			printf("pthread_create: %s\n", strerror(s));
-// 			return (-1);
-// 		}
-// 		i++;
-// 	}
-// 	s = pthread_create(&die_judge->thread_id, NULL, \
-// 		judgement_stop_thread, die_judge);
-// 	if (s != 0)
-// 	{
-// 		printf("pthread_create: %s\n", strerror(s));
-// 		return (-1);
-// 	}
-// 	return (0);
-// }
+	i = 0;
+	while (i < total_philo)
+	{
+		s = pthread_create(&arg[i].thread_id, NULL, \
+							action_philosophers, &arg[i]);
+		if (s != 0)
+		{
+			printf("pthread_create: %s\n", strerror(s));
+			return (-1);
+		}
+		i++;
+	}
+	s = pthread_create(&judge_id, NULL, \
+						judgement_stop_thread, arg);
+	if (s != 0)
+	{
+		printf("pthread_create: %s\n", strerror(s));
+		return (-1);
+	}
 
-// int	wait_philosopher_threads(int total_philo, t_thread_arg *arg, \
-// 								t_die_judge *die_judge)
+	i = 0;
+	while (i < total_philo)
+	{
+		s = pthread_join(arg[i].thread_id, &retval);
+		if (s != 0)
+		{
+			printf("pthread_join: %s\n", strerror(s));
+			return (-1);
+		}
+		i++;
+	}
+	s = pthread_join(judge_id, &j_retval);
+	if (s != 0)
+	{
+		printf("pthread_join: %s\n", strerror(s));
+		return (-1);
+	}
+	return (0);
+}
+
+// int	wait_philosopher_threads(t_thread_arg *arg, int *total_philo)
 // {
 // 	void	*retval;
 // 	void	*j_retval;
@@ -49,7 +68,7 @@
 // 	int		s;
 
 // 	i = 0;
-// 	while (total_philo > i)
+// 	while (i < total_philo)
 // 	{
 // 		s = pthread_join(arg[i].thread_id, &retval);
 // 		if (s != 0)
@@ -74,7 +93,7 @@ void	destroy_mutexes(int total_philo, pthread_mutex_t *forks, \
 	int	i;
 
 	i = 0;
-	while (total_philo > i)
+	while (i < total_philo)
 	{
 		pthread_mutex_destroy(&forks[i]);
 		i++;
@@ -87,9 +106,9 @@ void	destroy_mutexes(int total_philo, pthread_mutex_t *forks, \
 
 
 void	cleanup_resources(int total_philo, t_thread_arg *arg, \
-							pthread_mutex_t *forks)
+							pthread_mutex_t *forks, t_mutexs *shared_mutex)
 {
-	destroy_mutexes(total_philo, forks, arg->mutex);
+	destroy_mutexes(total_philo, forks, shared_mutex);
 	free(arg);
 	free(forks);
 }
@@ -98,20 +117,20 @@ int	mulch_thread(t_univ_rules rules)
 {
 	t_thread_arg	*arg;
 	pthread_mutex_t	*forks;
+	t_mutexs		shared_mutex;
 
-	if (setup_thread_resources(rules, &arg, &forks) != 0)
+	if (setup_thread_resources(rules, &arg, &forks, &shared_mutex) != 0)
 		return (-1);
-	// if (create_philosopher_threads(&rules, &s_data, &die_judge) != 0)
+	if (create_philosopher_threads(arg, rules.total_philo) != 0)
+	{
+		cleanup_resources(rules.total_philo, arg, forks, &shared_mutex);
+		return (-1);
+	}
+	// if (wait_philosopher_threads(rules.total_philo, &arg) != 0)
 	// {
-	// 	cleanup_resources(rules.total_philo, arg, forks);
+	// 	cleanup_resources(rules.total_philo, arg, forks, &shared_mutex);
 	// 	return (-1);
 	// }
-	// if (wait_philosopher_threads(rules.total_philo, \
-	// 							s_data.arg, &die_judge) != 0)
-	// {
-	// 	cleanup_resources(rules.total_philo, arg, forks);
-	// 	return (-1);
-	// }
-	cleanup_resources(rules.total_philo, arg, forks);
+	cleanup_resources(rules.total_philo, arg, forks, &shared_mutex);
 	return (0);
 }
