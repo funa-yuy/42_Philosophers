@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/26 20:20:19 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/26 20:25:08 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,6 @@ void	*action_philosophers(void *arg)
 
 	data = (t_thread_arg *)arg;
 	rules = data->u_rules;
-	(void)rules;
-
-	printf("%d\n", data->philo_id);
 	eat_num = 0;
 	while (!*data->can_start_eat)
 		usleep(100);
