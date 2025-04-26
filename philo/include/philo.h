@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/23 21:13:17 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/26 12:49:35 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,7 @@
 # define LOG_STATUS "\x1b[32m%ld\x1b[39m %d %s\n"
 
 /* struct */
-typedef struct s_mutexes
-{
-	pthread_mutex_t	start_tv_mutex;
-	pthread_mutex_t	*last_eat_mutexes;
-	pthread_mutex_t	stop_thread_mutex;
-	pthread_mutex_t	start_eat_mutex;
-	pthread_mutex_t	*eat_full_mutexes;
-}	t_mutexes;
-
-typedef struct s_univ_rules
+typedef struct s_univ_rules//値は全て同じにしたいが、変更は加えないので共有する必要はない
 {
 	int	total_philo;
 	int	time_die_ms;
@@ -45,58 +36,38 @@ typedef struct s_univ_rules
 	int	must_eat;
 }	t_univ_rules;
 
+typedef struct s_mutexs
+{
+	pthread_mutex_t	start_tv_mutex;//スタート時刻を設定する時のmutex
+	pthread_mutex_t	eat_mutex;;//last_eat_time,is_eat_fullを読み書きする時のmutex
+	pthread_mutex_t	thread_mutex;//can_stop_thread,can_start_eatを読み書きする時のmutex
+	pthread_mutex_t	write_mutex;//printfする時のmutex
+}	t_mutexs;
+
+// arg[0]~arg[total_philo]まで作る
 typedef struct s_thread_arg
 {
 	pthread_t		thread_id;
 	int				philo_id;
-	pthread_mutex_t	*first_fork;
-	pthread_mutex_t	*second_fork;
-	/* TODO: 以下2つ、最終的に消す */
-	int				first_fork_n;
-	int				second_fork_n;
-	long			*start_tv_ms;
-	long			*last_eat_time;
-	bool			*can_stop_thread;
-	bool			*can_start_eat;
-	bool			*is_eat_full;
-	t_mutexes		mutexes;
+	pthread_mutex_t	*first_fork;//forks[philo_pos]
+	pthread_mutex_t	*second_fork;//forks[(philo_pos + 1) % total_philo]
+	long			last_eat_time;//action_philosophers関数で、スレッドごとに値を書き換える。judgement_stop_thread関数内で、スレッドごとに値がどうなっているか見る
+	bool			is_eat_full;//action_philosophers関数で、スレッドごとに値を書き換える。judgement_stop_thread関数内で、スレッドごとに値がどうなっているか見る
+	long			*start_tv_ms;//データ共有したい(judgement_stop_thread関数内で書き換えられたら、ほかのスレッドにも書き換えた内容を共有したい)
+	bool			*can_stop_thread;//データ共有したい(judgement_stop_thread関数内で書き換えられたら、ほかのスレッドにも書き換えた内容を共有したい)
+	bool			*can_start_eat;//データ共有したい(judgement_stop_thread関数内で書き換えられたら、ほかのスレッドにも書き換えた内容を共有したい)
+	t_mutexs			*mutex;//→中身t_mutex、データ共有したい。mutex_lock,unlockしたい
 	t_univ_rules	u_rules;
 }	t_thread_arg;
-
-typedef struct s_die_judge
-{
-	pthread_t		thread_id;
-	long			*start_tv_ms;
-	long			*last_eat_time;
-	bool			*can_stop_thread;
-	bool			*can_start_eat;
-	bool			*is_eat_full;
-	t_mutexes		mutexes;
-	t_univ_rules	u_rules;
-}	t_die_judge;
-
-typedef struct s_share_data
-{
-	t_thread_arg	*arg;
-	pthread_mutex_t	*forks;
-	long			*start_tv_ms;
-	long			*last_eat_time;
-	bool			*can_stop_thread;
-	bool			*can_start_eat;
-	bool			*is_eat_full;
-	t_mutexes		mutexes;
-	t_univ_rules	u_rules;
-}	t_share_data;
 
 /* function */
 int				init_univ_rules(t_univ_rules *rules, int argc, char *argv[]);
 long			printf_philo_status(char *status, long s_time, int n_philo);
-int				setup_thread_resources(t_univ_rules rules, \
-										t_share_data	*s_data, \
-										t_die_judge *die_judge);
-void			init_thread_arg(t_univ_rules rules, t_share_data *s_data);
-void			init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, \
-								t_share_data *s_data);
+int				setup_thread_resources(t_univ_rules rules, t_thread_arg **arg, \
+										pthread_mutex_t **forks);
+void			init_thread_arg(t_thread_arg *arg, pthread_mutex_t *forks, \
+								t_mutexs *m, t_univ_rules rules);
+// void			init_die_judge(t_die_judge	*die_judge, t_univ_rules rules, t_share_data *s_data);
 int				mulch_thread(t_univ_rules rules);
 void			*action_philosophers(void *arg);
 void			*judgement_stop_thread(void *arg);

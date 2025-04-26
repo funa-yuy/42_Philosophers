@@ -6,27 +6,25 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 20:32:11 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/23 20:52:04 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/26 11:38:09 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-// void	print_one_thread_arg(t_thread_arg *arg)
-// {
-// 	printf("--- thread_arg 情報 ---\n");
-// 	printf("philo_id      : %d\n", arg->philo_id);
-// 	printf("first_fork     : %p\n", (void *)arg->first_fork);
-// 	printf("right_fork    : %p\n", (void *)arg->second_fork);
-// 	printf("first_fork_n   : %d\n", arg->first_fork_n);
-// 	printf("second_fork_n  : %d\n", arg->second_fork_n);
-// 	printf("start_tv_ms   : %ld (%p)\n", *arg->start_tv_ms, (void *)arg->start_tv_ms);
-// 	printf("last_eat_time : %ld (%p)\n", *(arg->last_eat_time), (void *)arg->last_eat_time);
-// 	printf("can_stop_thread  : %s (%p)\n", *(arg->can_stop_thread) ? "true" : "false", (void *)arg->can_stop_thread);
-// 	printf("can_start_eat  : %s (%p)\n", *(arg->can_start_eat) ? "true" : "false", (void *)arg->can_start_eat);
-// 	printf("is_eat_full : %s (%p)\n", *(arg->is_eat_full) ? "true" : "false", (void *)arg->is_eat_full);
-// 	printf("----------------------\n");
-// }
+void	print_one_thread_arg(t_thread_arg *arg)
+{
+	printf("--- thread_arg 情報 ---\n");
+	printf("philo_id        : %d\n", arg->philo_id);
+	printf("first_fork      : %p\n", (void *)arg->first_fork);
+	printf("second_fork     : %p\n", (void *)arg->second_fork);
+	printf("last_eat_time   : %ld (%p)\n", arg->last_eat_time, (void *)&arg->last_eat_time);
+	printf("is_eat_full     : %s (%p)\n", arg->is_eat_full ? "true" : "false", (void *)&arg->is_eat_full);
+	printf("start_tv_ms     : %ld (%p)\n", *arg->start_tv_ms, (void *)arg->start_tv_ms);
+	printf("can_stop_thread : %s (%p)\n", *arg->can_stop_thread ? "true" : "false", (void *)arg->can_stop_thread);
+	printf("can_start_eat   : %s (%p)\n", *arg->can_start_eat ? "true" : "false", (void *)arg->can_start_eat);
+	printf("------------------------\n");
+}
 
 void	assign_forks(t_thread_arg *arg, pthread_mutex_t *forks, \
 						int total_philo, int philo_pos)
@@ -35,37 +33,39 @@ void	assign_forks(t_thread_arg *arg, pthread_mutex_t *forks, \
 	{
 		arg->first_fork = &forks[philo_pos];
 		arg->second_fork = &forks[(philo_pos + 1) % total_philo];
-		arg->first_fork_n = philo_pos;
-		arg->second_fork_n = (philo_pos + 1) % total_philo;
 	}
 	else
 	{
 		arg->first_fork = &forks[(philo_pos + 1) % total_philo];
 		arg->second_fork = &forks[philo_pos];
-		arg->first_fork_n = (philo_pos + 1) % total_philo;
-		arg->second_fork_n = philo_pos;
 	}
 }
 
-void	init_thread_arg(t_univ_rules rules, t_share_data *s_data)
+void	init_thread_arg(t_thread_arg *arg, pthread_mutex_t *forks, \
+						t_mutexs *m, t_univ_rules rules)
 {
-	int				i;
-	t_thread_arg	*arg;
+	int		i;
+	long	start_tv_ms;
+	bool	can_stop_thread;
+	bool	can_start_eat;
 
-	arg = s_data->arg;
+	start_tv_ms = 0;
+	can_stop_thread = false;
+	can_start_eat = false;
 	i = 0;
-	while (rules.total_philo > i)
+	while (i < rules.total_philo)
 	{
+		arg[i].thread_id = 0;
 		arg[i].philo_id = i;
+		assign_forks(&arg[i], forks, rules.total_philo, i);
+		arg[i].last_eat_time = -1;
+		arg[i].is_eat_full = false;
+		arg[i].start_tv_ms = &start_tv_ms;
+		arg[i].can_stop_thread = &can_stop_thread;
+		arg[i].can_start_eat = &can_start_eat;
+		arg[i].mutex = m;
 		arg[i].u_rules = rules;
-		arg[i].start_tv_ms = s_data->start_tv_ms;
-		arg[i].last_eat_time = &s_data->last_eat_time[i];
-		arg[i].can_stop_thread = s_data->can_stop_thread;
-		arg[i].can_start_eat = s_data->can_start_eat;
-		arg[i].is_eat_full = &s_data->is_eat_full[i];
-		assign_forks(&arg[i], s_data->forks, rules.total_philo, i);
-		arg[i].mutexes = s_data->mutexes;
-		// print_one_thread_arg(&arg[i]);
+		print_one_thread_arg(&arg[i]);
 		i++;
 	}
 }

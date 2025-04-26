@@ -165,7 +165,6 @@ void	init_thread_arg(t_thread_arg *arg, pthread_mutex_t *forks, t_mutexs *m, t_u
 	start_tv_ms = 0;
 	can_stop_thread = false;
 	can_start_eat = false;
-
 	i = 0;
 	while (i < rules.total_philo)
 	{
@@ -179,39 +178,36 @@ void	init_thread_arg(t_thread_arg *arg, pthread_mutex_t *forks, t_mutexs *m, t_u
 		arg[i].can_start_eat = &can_start_eat;
 		arg[i].mutex = m;
 		arg[i].u_rules = rules;
-
 		print_one_thread_arg(&arg[i]);
 		i++;
 	}
 }
 
-t_thread_arg	*setup_thread_resources(t_univ_rules rules)
+int	setup_thread_resources(t_univ_rules rules, t_thread_arg **arg, pthread_mutex_t **forks)
 {
-	t_thread_arg	*arg;
 	t_mutexs		shared_mutex;
-	pthread_mutex_t	*forks;
 
 	pthread_mutex_init(&shared_mutex.start_tv_mutex, NULL);
 	pthread_mutex_init(&shared_mutex.eat_mutex, NULL);
 	pthread_mutex_init(&shared_mutex.thread_mutex, NULL);
 	pthread_mutex_init(&shared_mutex.write_mutex, NULL);
 
-	arg = malloc(rules.total_philo * sizeof(t_thread_arg));
-	if (arg == NULL)
-		return (NULL);
-	forks = malloc(rules.total_philo * sizeof(pthread_mutex_t));
-	if (forks == NULL)
-		return (NULL);
-	init_thread_arg(arg, forks, &shared_mutex, rules);
-	return (arg);
+	*arg = malloc(rules.total_philo * sizeof(t_thread_arg));
+	if (*arg == NULL)
+		return (-1);
+	*forks = malloc(rules.total_philo * sizeof(pthread_mutex_t));
+	if (*forks == NULL)
+		return (-1);
+	init_thread_arg(*arg, *forks, &shared_mutex, rules);
+	return (0);
 }
 
 int	mulch_thread(t_univ_rules rules)
 {
 	t_thread_arg	*arg;
+	pthread_mutex_t *forks;
 
-	arg = setup_thread_resources(rules);
-	if (arg == NULL)
+	if (setup_thread_resources(rules, &arg, &forks) != 0)
 		return (-1);
 
 	// if (create_philosopher_threads(arg, rules.total_philo,) != 0)
