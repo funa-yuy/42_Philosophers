@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_thread_arg.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 20:32:11 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 15:21:19 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 17:15:45 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ void	assign_forks(t_thread_arg *arg, pthread_mutex_t *forks, \
 }
 
 void	init_thread_arg(t_thread_arg *arg, pthread_mutex_t *forks, \
-						t_mutexs *m, t_univ_rules rules, \
-						long *start_tv_ms, bool *can_stop_thread, bool *can_start_eat)
+						t_shared_data *shared, t_univ_rules rules)
 {
 	int		i;
 
@@ -60,10 +59,10 @@ void	init_thread_arg(t_thread_arg *arg, pthread_mutex_t *forks, \
 		assign_forks(&arg[i], forks, rules.total_philo, i);
 		arg[i].last_eat_time = -1;
 		arg[i].is_eat_full = false;
-		arg[i].start_tv_ms = start_tv_ms;
-		arg[i].can_stop_thread = can_stop_thread;
-		arg[i].can_start_eat = can_start_eat;
-		arg[i].mutex = m;
+		arg[i].start_tv_ms = &shared->start_tv_ms;
+		arg[i].can_stop_thread = &shared->can_stop_thread;
+		arg[i].can_start_eat = &shared->can_start_eat;
+		arg[i].mutex = &shared->mutex;
 		arg[i].u_rules = rules;
 		// print_one_thread_arg(&arg[i]);
 		i++;
