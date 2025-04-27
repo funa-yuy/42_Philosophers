@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_thread_arg.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 20:32:11 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 12:56:46 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 15:21:19 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // 	printf("second_fork     : %p\n", (void *)arg->second_fork);
 // 	printf("last_eat_time   : %ld (%p)\n", arg->last_eat_time, (void *)&arg->last_eat_time);
 // 	printf("is_eat_full     : %s (%p)\n", arg->is_eat_full ? "true" : "false", (void *)&arg->is_eat_full);
-// 	printf("start_tvms     : %ld (%p)\n", *arg->start_tvms, (void *)arg->start_tv_ms);
+// 	printf("start_tvms     : %ld (%p)\n", *arg->start_tv_ms, (void *)arg->start_tv_ms);
 // 	printf("can_stop_thread : %s (%p)\n", *arg->can_stop_thread ? "true" : "false", (void *)arg->can_stop_thread);
 // 	printf("can_start_eat   : %s (%p)\n", *arg->can_start_eat ? "true" : "false", (void *)arg->can_start_eat);
 // 	printf("mutex           : %p\n", (void *)arg->mutex);

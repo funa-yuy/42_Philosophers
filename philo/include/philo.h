@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 14:46:23 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 15:28:48 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 /* macro */
 # define UNIT_CONV 1000
 # define LOG_STATUS "\x1b[32m%ld\x1b[39m %d %s\n"
+# define PHILO_MAX 400
 
 /* struct */
 typedef struct s_univ_rules//値は全て同じにしたいが、変更は加えないので共有する必要はない
