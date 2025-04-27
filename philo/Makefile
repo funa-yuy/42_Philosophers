@@ -6,13 +6,13 @@
 #    By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 01:21:55 by miyuu             #+#    #+#              #
-#    Updated: 2025/04/21 22:24:03 by miyuu            ###   ########.fr        #
+#    Updated: 2025/04/27 14:45:55 by miyuu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 # Directories
 SRC_DIR = src
@@ -25,7 +25,6 @@ SRC_FILES = main.c \
 			printf_philo_status.c \
 			init_thread_arg.c \
 			mulch_thread.c \
-			init_die_judge.c \
 			get_now_time_ms.c \
 			setup_thread_resources.c \
 			judgement_stop_thread.c \
@@ -33,7 +32,8 @@ SRC_FILES = main.c \
 			ft_isdigit.c \
 			utils.c \
 			take_put_forks.c \
-			action_philosophers.c
+			action_philosophers.c \
+			utils_mutex.c
 
 # Header files
 HEADER = $(HEADER_DIR)/philo.h

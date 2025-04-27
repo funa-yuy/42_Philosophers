@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_univ_rules.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:27:06 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/21 20:44:03 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 15:34:28 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ int	init_univ_rules(t_univ_rules *rules, int argc, char *argv[])
 	if (!check_valid_args(argc, argv))
 	{
 		printf("Invalid argument.\n");
+		return (-1);
+	}
+	if (ft_atoi(argv[1]) > PHILO_MAX)
+	{
+		printf("number_of_philosophers must be less than or equal to"\
+				"%d.\n", PHILO_MAX);
 		return (-1);
 	}
 	rules->total_philo = ft_atoi(argv[1]);
