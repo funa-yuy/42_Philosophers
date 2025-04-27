@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 17:35:27 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 17:53:07 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,32 +96,16 @@ void	*action_philosophers(void *arg)
 	t_thread_arg	*data;
 	t_univ_rules	rules;
 	int				eat_num;
-	bool			start;
-	bool			stop;
 
 	data = (t_thread_arg *)arg;
 	rules = data->u_rules;
 	eat_num = 0;
-	while (true)
-	{
-		start = get_bool_mutex(B_CAN_START_EAT, &data->mutex->thread_mutex, data);
-		// pthread_mutex_lock(&data->mutex->thread_mutex);
-		// start = *data->can_start_eat;
-		// pthread_mutex_unlock(&data->mutex->thread_mutex);
-		if (start)
-			break ;
+	while (!get_bool_mutex(B_CAN_START_EAT, &data->mutex->thread_mutex, data))
 		usleep(100);
-	}
 	if (data->philo_id % 2 == 0)
 		thinking_lag(rules);
-	while (true)
+	while (!get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data))
 	{
-		stop = get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data);
-		// pthread_mutex_lock(&data->mutex->thread_mutex);
-		// stop = *data->can_stop_thread;
-		// pthread_mutex_unlock(&data->mutex->thread_mutex);
-		if (stop)
-			break ;
 		if (action_eat(data, rules, &eat_num) != 0)
 			break ;
 		if (action_sleep(data, rules) != 0)
