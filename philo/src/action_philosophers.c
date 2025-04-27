@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 17:08:32 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 17:35:27 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	*action_philosophers(void *arg)
 	eat_num = 0;
 	while (true)
 	{
-		start = get_bool_mutex(data, &data->mutex->thread_mutex, "can_start_eat");
+		start = get_bool_mutex(B_CAN_START_EAT, &data->mutex->thread_mutex, data);
 		// pthread_mutex_lock(&data->mutex->thread_mutex);
 		// start = *data->can_start_eat;
 		// pthread_mutex_unlock(&data->mutex->thread_mutex);
@@ -116,7 +116,7 @@ void	*action_philosophers(void *arg)
 		thinking_lag(rules);
 	while (true)
 	{
-		stop = get_bool_mutex(data, &data->mutex->thread_mutex, "can_stop_thread");
+		stop = get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data);
 		// pthread_mutex_lock(&data->mutex->thread_mutex);
 		// stop = *data->can_stop_thread;
 		// pthread_mutex_unlock(&data->mutex->thread_mutex);

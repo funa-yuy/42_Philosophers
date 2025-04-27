@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 17:07:55 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 17:35:37 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool	can_stop_philo_thread(t_thread_arg *data, int total_philo)
 			break ;
 		}
 		// pthread_mutex_lock(&data->mutex->eat_mutex);
-		if (!get_bool_mutex(&data[i], &data[i].mutex->thread_mutex, "eat_mutex"))
+		if (!get_bool_mutex(B_IS_EAT_FULL, &data[i].mutex->thread_mutex, &data[i]))
 		// if (!data[i].is_eat_full)
 			stop_thread = false;
 		// pthread_mutex_unlock(&data->mutex->eat_mutex);
@@ -83,7 +83,7 @@ void	*judgement_stop_thread(void *arg)
 	set_sdata_after_thread_create(data, total_philo);
 	while (true)
 	{
-		bool stop = get_bool_mutex(data, &data->mutex->thread_mutex, "can_stop_thread");
+		bool stop = get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data);
 		// pthread_mutex_lock(&data->mutex->thread_mutex);
 		// bool stop = *data->can_stop_thread;
 		// pthread_mutex_unlock(&data->mutex->thread_mutex);
