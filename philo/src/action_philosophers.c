@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action_philosophers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 19:31:30 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 20:46:07 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,10 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 	}
 	printf_philo_status("is eating", data, data->philo_id + 1);
 	set_long_mutex(L_LAST_EAT_TIME, data, get_now_time_ms());
-	// data->last_eat_time = get_now_time_ms();
 	safe_usleep(rules.time_eat_ms);
 	put_forks(data);
 	if (rules.must_eat != -1 && ++(*eat_num) >= rules.must_eat)
-	{
 		set_bool_mutex(B_IS_EAT_FULL, data, true);
-		// pthread_mutex_lock(&data->mutex->eat_mutex);
-		// data->is_eat_full = true;
-		// pthread_mutex_unlock(&data->mutex->eat_mutex);
-	}
 	return (0);
 }
 
