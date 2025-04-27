@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 17:53:07 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 18:01:56 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,11 @@
 int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 {
 	take_forks(data, rules);
-	pthread_mutex_lock(&data->mutex->thread_mutex);
-	if (*data->can_stop_thread)
+	if (get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data))
 	{
-		pthread_mutex_unlock(&data->mutex->thread_mutex);
 		put_forks(data);
 		return (-1);
 	}
-	pthread_mutex_unlock(&data->mutex->thread_mutex);
 
 
 	printf_philo_status("is eating", data, data->philo_id + 1);
@@ -40,13 +37,9 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 
 int	action_sleep(t_thread_arg *data, t_univ_rules rules)
 {
-	pthread_mutex_lock(&data->mutex->thread_mutex);
-	if (*data->can_stop_thread)
-	{
-		pthread_mutex_unlock(&data->mutex->thread_mutex);
+	if (get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data))
 		return (-1);
-	}
-	pthread_mutex_unlock(&data->mutex->thread_mutex);
+
 	printf_philo_status("is sleeping", data, data->philo_id + 1);
 	safe_usleep(rules.time_sleep_ms);
 	return (0);
@@ -68,23 +61,13 @@ void	thinking_lag(t_univ_rules rules)
 
 int	action_thinking(t_thread_arg *data, t_univ_rules rules)
 {
-	pthread_mutex_lock(&data->mutex->thread_mutex);
-	if (*data->can_stop_thread)
-	{
-		pthread_mutex_unlock(&data->mutex->thread_mutex);
+	if (get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data))
 		return (-1);
-	}
-	pthread_mutex_unlock(&data->mutex->thread_mutex);
 
 	printf_philo_status("is thinking", data, data->philo_id + 1);
 
-	pthread_mutex_lock(&data->mutex->thread_mutex);
-	if (*data->can_stop_thread)
-	{
-		pthread_mutex_unlock(&data->mutex->thread_mutex);
+	if (get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data))
 		return (-1);
-	}
-	pthread_mutex_unlock(&data->mutex->thread_mutex);
 
 	if (rules.total_philo % 2 != 0)
 		thinking_lag(rules);
