@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   judgement_stop_thread.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 20:57:51 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:39:08 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	*judgement_stop_thread(void *arg)
 		if (can_stop_philo_thread(data, total_philo))
 		{
 			set_bool_mutex(B_CAN_STOP_THREAD, data, true);
-			// printf("------------ die ----------------\n");
 			return (NULL);
 		}
 	}

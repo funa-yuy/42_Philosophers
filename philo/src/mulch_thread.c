@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include <philo.h>
 
 int	wait_philosopher_threads(t_thread_arg *arg, pthread_t *judge_id, \
 								int total_philo)
@@ -26,7 +26,7 @@ int	wait_philosopher_threads(t_thread_arg *arg, pthread_t *judge_id, \
 		s = pthread_join(arg[i].thread_id, &retval);
 		if (s != 0)
 		{
-			printf("pthread_join: %s\n", strerror(s));
+			printf("Error: pthread_join\n");
 			return (-1);
 		}
 		i++;
@@ -34,7 +34,7 @@ int	wait_philosopher_threads(t_thread_arg *arg, pthread_t *judge_id, \
 	s = pthread_join(*judge_id, &j_retval);
 	if (s != 0)
 	{
-		printf("pthread_join: %s\n", strerror(s));
+		printf("Error: pthread_join\n");
 		return (-1);
 	}
 	return (0);
@@ -53,7 +53,7 @@ int	create_philosopher_threads(t_thread_arg *arg, int total_philo, \
 							action_philosophers, &arg[i]);
 		if (s != 0)
 		{
-			printf("pthread_create: %s\n", strerror(s));
+			printf("Error: pthread_create\n");
 			return (-1);
 		}
 		i++;
@@ -62,7 +62,7 @@ int	create_philosopher_threads(t_thread_arg *arg, int total_philo, \
 						judgement_stop_thread, arg);
 	if (s != 0)
 	{
-		printf("pthread_create: %s\n", strerror(s));
+		printf("Error: pthread_create\n");
 		return (-1);
 	}
 	return (0);

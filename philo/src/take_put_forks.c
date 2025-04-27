@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   take_put_forks.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:34:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 20:48:27 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:38:02 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include <philo.h>
 
 void	put_forks(t_thread_arg *philo)
 {
