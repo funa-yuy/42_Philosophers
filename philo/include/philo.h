@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 15:28:48 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:30:27 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_univ_rules//値は全て同じにしたいが、変更は加え
 typedef struct s_mutexs
 {
 	pthread_mutex_t	start_tv_mutex;//スタート時刻を設定する時のmutex
-	pthread_mutex_t	eat_mutex;;//last_eat_time,is_eat_fullを読み書きする時のmutex
+	pthread_mutex_t	eat_mutex;//last_eat_time,is_eat_fullを読み書きする時のmutex
 	pthread_mutex_t	thread_mutex;//can_stop_thread,can_start_eatを読み書きする時のmutex
 	pthread_mutex_t	write_mutex;//printfする時のmutex
 }	t_mutexs;
@@ -81,5 +81,6 @@ void			*action_philosophers(void *arg);
 int				ft_atoi(const char *str);
 int				ft_isdigit(int c);
 void			safe_usleep(int time_ms);
+bool			get_bool_mutex(t_thread_arg *data, pthread_mutex_t *m, char *src);
 
 #endif

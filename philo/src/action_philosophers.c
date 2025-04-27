@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 14:47:10 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 16:43:16 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,27 +96,28 @@ void	*action_philosophers(void *arg)
 	t_thread_arg	*data;
 	t_univ_rules	rules;
 	int				eat_num;
+	bool			start;
+	bool			stop;
 
 	data = (t_thread_arg *)arg;
 	rules = data->u_rules;
 	eat_num = 0;
-
 	while (true)
 	{
+		// start = (data, &data->mutex->thread_mutex);
 		pthread_mutex_lock(&data->mutex->thread_mutex);
-		bool start = *data->can_start_eat;
+		start = *data->can_start_eat;
 		pthread_mutex_unlock(&data->mutex->thread_mutex);
 		if (start)
 			break ;
 		usleep(100);
 	}
-
 	if (data->philo_id % 2 == 0)
 		thinking_lag(rules);
 	while (true)
 	{
 		pthread_mutex_lock(&data->mutex->thread_mutex);
-		bool stop = *data->can_stop_thread;
+		stop = *data->can_stop_thread;
 		pthread_mutex_unlock(&data->mutex->thread_mutex);
 		if (stop)
 			break ;
