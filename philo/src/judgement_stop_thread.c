@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 14:48:23 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 15:45:18 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	*judgement_stop_thread(void *arg)
 			pthread_mutex_lock(&data->mutex->thread_mutex);
 			*data->can_stop_thread = true;
 			pthread_mutex_unlock(&data->mutex->thread_mutex);
-			printf("------------ die ----------------\n");
+			// printf("------------ die ----------------\n");
 			return (NULL);
 		}
 	}
