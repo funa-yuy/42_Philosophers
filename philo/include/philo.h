@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 13:13:43 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:30:32 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_thread_arg
 
 /* function */
 int				init_univ_rules(t_univ_rules *rules, int argc, char *argv[]);
-long			printf_philo_status(char *status, t_thread_arg *data, int n_philo);
+void			printf_philo_status(char *status, t_thread_arg *data, int n_philo);
 int				setup_thread_resources(t_univ_rules rules, t_thread_arg **arg, \
 										pthread_mutex_t **forks, t_mutexs *shared_mutex, \
 										long *start_tv_ms, bool *can_stop_thread, bool *can_start_eat);

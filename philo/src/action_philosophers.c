@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action_philosophers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 14:05:59 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:32:00 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 	pthread_mutex_lock(&data->mutex->thread_mutex);
 	if (*data->can_stop_thread)
 	{
-		// printf("can_stop_thread : %s (%p)\n", *data->can_stop_thread ? "true" : "false", (void *)data->can_stop_thread);
 		pthread_mutex_unlock(&data->mutex->thread_mutex);
 		put_forks(data);
 		return (-1);
@@ -34,7 +33,6 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 	{
 		pthread_mutex_lock(&data->mutex->eat_mutex);
 		data->is_eat_full = true;
-		// printf("is_eat_full     : %s (%p)\n", data->is_eat_full ? "true" : "false", (void *)&data->is_eat_full);
 		pthread_mutex_unlock(&data->mutex->eat_mutex);
 	}
 	return (0);
@@ -45,7 +43,6 @@ int	action_sleep(t_thread_arg *data, t_univ_rules rules)
 	pthread_mutex_lock(&data->mutex->thread_mutex);
 	if (*data->can_stop_thread)
 	{
-		// printf("can_stop_thread : %s (%p)\n", *data->can_stop_thread ? "true" : "false", (void *)data->can_stop_thread);
 		pthread_mutex_unlock(&data->mutex->thread_mutex);
 		return (-1);
 	}
@@ -74,7 +71,6 @@ int	action_thinking(t_thread_arg *data, t_univ_rules rules)
 	pthread_mutex_lock(&data->mutex->thread_mutex);
 	if (*data->can_stop_thread)
 	{
-		// printf("can_stop_thread : %s (%p)\n", *data->can_stop_thread ? "true" : "false", (void *)data->can_stop_thread);
 		pthread_mutex_unlock(&data->mutex->thread_mutex);
 		return (-1);
 	}
@@ -85,7 +81,6 @@ int	action_thinking(t_thread_arg *data, t_univ_rules rules)
 	pthread_mutex_lock(&data->mutex->thread_mutex);
 	if (*data->can_stop_thread)
 	{
-		// printf("can_stop_thread : %s (%p)\n", *data->can_stop_thread ? "true" : "false", (void *)data->can_stop_thread);
 		pthread_mutex_unlock(&data->mutex->thread_mutex);
 		return (-1);
 	}

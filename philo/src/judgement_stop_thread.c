@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   judgement_stop_thread.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 14:05:04 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:28:49 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,6 @@ void	*judgement_stop_thread(void *arg)
 	data = (t_thread_arg *)arg;
 	total_philo = data->u_rules.total_philo;
 	set_sdata_after_thread_create(data, total_philo);
-
-	// int	i = 0;
-	// while (i < total_philo)
-	// {
-	// 	printf("ジャッジis_eat_full     : %s (%p)\n", data[i].is_eat_full ? "true" : "false", (void *)&data[i].is_eat_full);
-	// 	i++;
-	// }
-	// printf("ジャッジcan_stop_thread     : %s (%p)\n", *data->can_stop_thread ? "true" : "false", (void *)data->can_stop_thread);
 	while (true)
 	{
 		pthread_mutex_lock(&data->mutex->thread_mutex);
@@ -100,7 +92,7 @@ void	*judgement_stop_thread(void *arg)
 			pthread_mutex_lock(&data->mutex->thread_mutex);
 			*data->can_stop_thread = true;
 			pthread_mutex_unlock(&data->mutex->thread_mutex);
-			// printf("------------ die ----------------\n");
+			printf("------------ die ----------------\n");
 			return (NULL);
 		}
 	}
