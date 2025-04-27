@@ -6,7 +6,7 @@
 /*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 13:21:41 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:05:04 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ void	set_sdata_after_thread_create(t_thread_arg *data, int total_philo)
 
 		i++;
 	}
+	pthread_mutex_lock(&data->mutex->thread_mutex);
 	*data->can_start_eat = true;
+	pthread_mutex_unlock(&data->mutex->thread_mutex);
 }
 
 void	*judgement_stop_thread(void *arg)
@@ -78,8 +80,7 @@ void	*judgement_stop_thread(void *arg)
 	data = (t_thread_arg *)arg;
 	total_philo = data->u_rules.total_philo;
 	set_sdata_after_thread_create(data, total_philo);
-	while (!*data->can_start_eat)
-		usleep(100);
+
 	// int	i = 0;
 	// while (i < total_philo)
 	// {
