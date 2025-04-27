@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 16:30:27 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 17:17:01 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,14 @@ typedef struct s_mutexs
 	pthread_mutex_t	write_mutex;//printfする時のmutex
 }	t_mutexs;
 
+typedef struct s_shared_data
+{
+	long		start_tv_ms;
+	bool		can_stop_thread;
+	bool		can_start_eat;
+	t_mutexs	mutex;
+}	t_shared_data;
+
 // arg[0]~arg[total_philo]まで作る
 typedef struct s_thread_arg
 {
@@ -65,11 +73,9 @@ typedef struct s_thread_arg
 int				init_univ_rules(t_univ_rules *rules, int argc, char *argv[]);
 void			printf_philo_status(char *status, t_thread_arg *data, int n_philo);
 int				setup_thread_resources(t_univ_rules rules, t_thread_arg **arg, \
-										pthread_mutex_t **forks, t_mutexs *shared_mutex, \
-										long *start_tv_ms, bool *can_stop_thread, bool *can_start_eat);
+										pthread_mutex_t **forks, t_shared_data *shared);
 void			init_thread_arg(t_thread_arg *arg, pthread_mutex_t *forks, \
-								t_mutexs *m, t_univ_rules rules, \
-								long *start_tv_ms, bool *can_stop_thread, bool *can_start_eat);
+								t_shared_data *shared, t_univ_rules rules);
 int				mulch_thread(t_univ_rules rules);
 void			*action_philosophers(void *arg);
 void			*judgement_stop_thread(void *arg);

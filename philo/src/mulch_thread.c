@@ -97,27 +97,24 @@ int	mulch_thread(t_univ_rules rules)
 {
 	t_thread_arg	*arg;
 	pthread_mutex_t	*forks;
-	t_mutexs		shared_mutex;
+	t_shared_data	shared;
 	pthread_t		judge_id;
-	long			start_tv_ms;
-	bool			can_stop_thread;
-	bool			can_start_eat;
 
-	start_tv_ms = 0;
-	can_stop_thread = false;
-	can_start_eat = false;
-	if (setup_thread_resources(rules, &arg, &forks, &shared_mutex, &start_tv_ms, &can_stop_thread, &can_start_eat) != 0)
+	shared.start_tv_ms = 0;
+	shared.can_stop_thread = false;
+	shared.can_start_eat = false;
+	if (setup_thread_resources(rules, &arg, &forks, &shared) != 0)
 		return (-1);
 	if (create_philosopher_threads(arg, rules.total_philo, &judge_id) != 0)
 	{
-		cleanup_resources(rules.total_philo, arg, forks, &shared_mutex);
+		cleanup_resources(rules.total_philo, arg, forks, &shared.mutex);
 		return (-1);
 	}
 	if (wait_philosopher_threads(arg, &judge_id, rules.total_philo) != 0)
 	{
-		cleanup_resources(rules.total_philo, arg, forks, &shared_mutex);
+		cleanup_resources(rules.total_philo, arg, forks, &shared.mutex);
 		return (-1);
 	}
-	cleanup_resources(rules.total_philo, arg, forks, &shared_mutex);
+	cleanup_resources(rules.total_philo, arg, forks, &shared.mutex);
 	return (0);
 }
