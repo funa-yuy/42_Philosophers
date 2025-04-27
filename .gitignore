@@ -54,3 +54,4 @@ dkms.conf
 # original
 philo/philo
 philo/LazyPhilosophersTester/
+.vscode
