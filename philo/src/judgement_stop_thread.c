@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   judgement_stop_thread.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 17:54:36 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 18:16:28 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ bool	can_stop_philo_thread(t_thread_arg *data, int total_philo)
 			return (true);
 			break ;
 		}
-		if (!get_bool_mutex(B_IS_EAT_FULL, &data[i].mutex->thread_mutex, \
-							&data[i]))
+		if (!get_bool_mutex(B_IS_EAT_FULL, &data[i]))
 			stop_thread = false;
 		i++;
 	}
@@ -79,7 +78,7 @@ void	*judgement_stop_thread(void *arg)
 	data = (t_thread_arg *)arg;
 	total_philo = data->u_rules.total_philo;
 	set_sdata_after_thread_create(data, total_philo);
-	while (!get_bool_mutex(B_CAN_STOP_THREAD, &data->mutex->thread_mutex, data))
+	while (!get_bool_mutex(B_CAN_STOP_THREAD, data))
 	{
 		if (can_stop_philo_thread(data, total_philo))
 		{

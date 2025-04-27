@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 17:35:58 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 18:15:32 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	*action_philosophers(void *arg);
 int		ft_atoi(const char *str);
 int		ft_isdigit(int c);
 void	safe_usleep(int time_ms);
-bool	get_bool_mutex(t_mutex_type type, pthread_mutex_t *m, \
-						t_thread_arg *data);
+bool	get_bool_mutex(t_mutex_type type, t_thread_arg *data);
 
 #endif
