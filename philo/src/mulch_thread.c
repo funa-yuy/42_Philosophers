@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo.h>
+#include "../include/philo.h"
 
 int	wait_philosopher_threads(t_thread_arg *arg, pthread_t *judge_id, \
 								int total_philo)
@@ -99,8 +99,14 @@ int	mulch_thread(t_univ_rules rules)
 	pthread_mutex_t	*forks;
 	t_mutexs		shared_mutex;
 	pthread_t		judge_id;
+	long			start_tv_ms;
+	bool			can_stop_thread;
+	bool			can_start_eat;
 
-	if (setup_thread_resources(rules, &arg, &forks, &shared_mutex) != 0)
+	start_tv_ms = 0;
+	can_stop_thread = false;
+	can_start_eat = false;
+	if (setup_thread_resources(rules, &arg, &forks, &shared_mutex, &start_tv_ms, &can_stop_thread, &can_start_eat) != 0)
 		return (-1);
 	if (create_philosopher_threads(arg, rules.total_philo, &judge_id) != 0)
 	{

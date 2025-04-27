@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/26 21:57:17 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 13:01:06 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ void	*judgement_stop_thread(void *arg)
 	set_sdata_after_thread_create(data, total_philo);
 	while (!*data->can_start_eat)
 		usleep(100);
-	int	i = 0;
-	while (i < total_philo)
-	{
-		printf("ジャッジis_eat_full     : %s (%p)\n", data[i].is_eat_full ? "true" : "false", (void *)&data[i].is_eat_full);
-		i++;
-	}
-	printf("ジャッジcan_stop_thread     : %s (%p)\n", *data->can_stop_thread ? "true" : "false", (void *)data->can_stop_thread);
+	// int	i = 0;
+	// while (i < total_philo)
+	// {
+	// 	printf("ジャッジis_eat_full     : %s (%p)\n", data[i].is_eat_full ? "true" : "false", (void *)&data[i].is_eat_full);
+	// 	i++;
+	// }
+	// printf("ジャッジcan_stop_thread     : %s (%p)\n", *data->can_stop_thread ? "true" : "false", (void *)data->can_stop_thread);
 	while (true)
 	{
 		pthread_mutex_lock(&data->mutex->thread_mutex);
@@ -93,7 +93,7 @@ void	*judgement_stop_thread(void *arg)
 			pthread_mutex_lock(&data->mutex->thread_mutex);
 			*data->can_stop_thread = true;
 			pthread_mutex_unlock(&data->mutex->thread_mutex);
-			printf("------------ die ----------------\n");
+			// printf("------------ die ----------------\n");
 			return (NULL);
 		}
 	}
