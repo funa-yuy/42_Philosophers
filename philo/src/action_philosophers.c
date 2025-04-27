@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action_philosophers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 13:01:39 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 13:21:53 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 		return (-1);
 	}
 	pthread_mutex_unlock(&data->mutex->thread_mutex);
-	printf_philo_status("is eating", *data->start_tv_ms, data->philo_id + 1);
+
+
+	printf_philo_status("is eating", data, data->philo_id + 1);
 	data->last_eat_time = get_now_time_ms();
 	safe_usleep(rules.time_eat_ms);
 	put_forks(data);
@@ -48,7 +50,7 @@ int	action_sleep(t_thread_arg *data, t_univ_rules rules)
 		return (-1);
 	}
 	pthread_mutex_unlock(&data->mutex->thread_mutex);
-	printf_philo_status("is sleeping", *data->start_tv_ms, data->philo_id + 1);
+	printf_philo_status("is sleeping", data, data->philo_id + 1);
 	safe_usleep(rules.time_sleep_ms);
 	return (0);
 }
@@ -77,7 +79,9 @@ int	action_thinking(t_thread_arg *data, t_univ_rules rules)
 		return (-1);
 	}
 	pthread_mutex_unlock(&data->mutex->thread_mutex);
-	printf_philo_status("is thinking", *data->start_tv_ms, data->philo_id + 1);
+
+	printf_philo_status("is thinking", data, data->philo_id + 1);
+
 	pthread_mutex_lock(&data->mutex->thread_mutex);
 	if (*data->can_stop_thread)
 	{

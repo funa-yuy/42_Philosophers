@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   judgement_stop_thread.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 13:01:06 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 13:21:41 by mfunakos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	did_someone_dead(int philo_id, t_thread_arg *data)
 	now_ms = get_now_time_ms();
 	if (now_ms - data[philo_id].last_eat_time >= time_die_ms)
 	{
-		printf_philo_status("died", *data->start_tv_ms, philo_id + 1);
+		printf_philo_status("died", data, philo_id + 1);
 		return (true);
 	}
 	return (false);
@@ -54,11 +54,17 @@ void	set_sdata_after_thread_create(t_thread_arg *data, int total_philo)
 {
 	int	i;
 
+	pthread_mutex_lock(&data->mutex->start_tv_mutex);
 	*data->start_tv_ms = get_now_time_ms();
+	pthread_mutex_unlock(&data->mutex->start_tv_mutex);
+
 	i = 0;
 	while (total_philo > i)
 	{
+		pthread_mutex_lock(&data->mutex->start_tv_mutex);
 		data[i].last_eat_time = *data->start_tv_ms;
+		pthread_mutex_unlock(&data->mutex->start_tv_mutex);
+
 		i++;
 	}
 	*data->can_start_eat = true;
