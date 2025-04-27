@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 20:32:11 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/23 20:52:04 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/21 12:35:49 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	init_thread_arg(t_univ_rules rules, t_share_data *s_data)
 		arg[i].can_start_eat = s_data->can_start_eat;
 		arg[i].is_eat_full = &s_data->is_eat_full[i];
 		assign_forks(&arg[i], s_data->forks, rules.total_philo, i);
-		arg[i].mutexes = s_data->mutexes;
 		// print_one_thread_arg(&arg[i]);
 		i++;
 	}

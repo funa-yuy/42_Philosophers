@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action_philosophers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/24 19:19:40 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:03:13 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 {
 	take_forks(data, rules);
-	if (get_bool_mutex(*data->can_stop_thread, \
-						&data->mutexes.stop_thread_mutex))
+	if (*data->can_stop_thread)
 	{
 		put_forks(data);
 		return (-1);
@@ -32,8 +31,7 @@ int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 
 int	action_sleep(t_thread_arg *data, t_univ_rules rules)
 {
-	if (get_bool_mutex(*data->can_stop_thread, \
-						&data->mutexes.stop_thread_mutex))
+	if (*data->can_stop_thread)
 		return (-1);
 	printf_philo_status("is sleeping", *data->start_tv_ms, data->philo_id + 1);
 	safe_usleep(rules.time_sleep_ms);
@@ -56,12 +54,10 @@ void	thinking_lag(t_univ_rules rules)
 
 int	action_thinking(t_thread_arg *data, t_univ_rules rules)
 {
-	if (get_bool_mutex(*data->can_stop_thread, \
-						&data->mutexes.stop_thread_mutex))
+	if (*data->can_stop_thread)
 		return (-1);
 	printf_philo_status("is thinking", *data->start_tv_ms, data->philo_id + 1);
-	if (get_bool_mutex(*data->can_stop_thread, \
-						&data->mutexes.stop_thread_mutex))
+	if (*data->can_stop_thread)
 		return (-1);
 	if (rules.total_philo % 2 != 0)
 		thinking_lag(rules);
@@ -77,13 +73,11 @@ void	*action_philosophers(void *arg)
 	data = (t_thread_arg *)arg;
 	rules = data->u_rules;
 	eat_num = 0;
-	while (!get_bool_mutex(*data->can_start_eat, \
-			&data->mutexes.start_eat_mutex))
-		usleep(100);
+	while (!*data->can_start_eat)
+		;
 	if (data->philo_id % 2 == 0)
 		thinking_lag(rules);
-	while (!get_bool_mutex(*data->can_stop_thread, \
-							&data->mutexes.stop_thread_mutex))
+	while (!*data->can_stop_thread)
 	{
 		if (action_eat(data, rules, &eat_num) != 0)
 			break ;
