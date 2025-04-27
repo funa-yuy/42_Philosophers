@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 14:32:00 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 14:47:10 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	action_thinking(t_thread_arg *data, t_univ_rules rules)
 		return (-1);
 	}
 	pthread_mutex_unlock(&data->mutex->thread_mutex);
+
 	if (rules.total_philo % 2 != 0)
 		thinking_lag(rules);
 	return (0);
