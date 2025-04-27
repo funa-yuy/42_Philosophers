@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:53:30 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 18:15:32 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:28:05 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,8 @@ int		ft_atoi(const char *str);
 int		ft_isdigit(int c);
 void	safe_usleep(int time_ms);
 bool	get_bool_mutex(t_mutex_type type, t_thread_arg *data);
+void	set_bool_mutex(t_mutex_type type, t_thread_arg *data, bool val);
+long	get_long_mutex(t_mutex_type type, t_thread_arg *data);
+void	set_long_mutex(t_mutex_type type, t_thread_arg *data, long val);
 
 #endif

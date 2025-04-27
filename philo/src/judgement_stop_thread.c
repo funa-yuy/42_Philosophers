@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   judgement_stop_thread.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 19:41:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 18:16:28 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:29:28 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,25 @@ void	set_sdata_after_thread_create(t_thread_arg *data, int total_philo)
 {
 	int	i;
 
-	pthread_mutex_lock(&data->mutex->start_tv_mutex);
-	*data->start_tv_ms = get_now_time_ms();
-	pthread_mutex_unlock(&data->mutex->start_tv_mutex);
+	set_long_mutex(L_START_TV_MS, data, get_now_time_ms());
+	// pthread_mutex_lock(&data->mutex->start_tv_mutex);
+	// *data->start_tv_ms = get_now_time_ms();
+	// pthread_mutex_unlock(&data->mutex->start_tv_mutex);
 
 	i = 0;
 	while (total_philo > i)
 	{
-		pthread_mutex_lock(&data->mutex->start_tv_mutex);
-		data[i].last_eat_time = *data->start_tv_ms;
-		pthread_mutex_unlock(&data->mutex->start_tv_mutex);
+		set_long_mutex(L_LAST_EAT_TIME, &data[i], *data->start_tv_ms);
+		// pthread_mutex_lock(&data->mutex->start_tv_mutex);
+		// data[i].last_eat_time = *data->start_tv_ms;
+		// pthread_mutex_unlock(&data->mutex->start_tv_mutex);
 
 		i++;
 	}
-	pthread_mutex_lock(&data->mutex->thread_mutex);
-	*data->can_start_eat = true;
-	pthread_mutex_unlock(&data->mutex->thread_mutex);
+	set_bool_mutex(B_CAN_START_EAT, data, true);
+	// pthread_mutex_lock(&data->mutex->thread_mutex);
+	// *data->can_start_eat = true;
+	// pthread_mutex_unlock(&data->mutex->thread_mutex);
 }
 
 void	*judgement_stop_thread(void *arg)
@@ -82,9 +85,10 @@ void	*judgement_stop_thread(void *arg)
 	{
 		if (can_stop_philo_thread(data, total_philo))
 		{
-			pthread_mutex_lock(&data->mutex->thread_mutex);
-			*data->can_stop_thread = true;
-			pthread_mutex_unlock(&data->mutex->thread_mutex);
+			set_bool_mutex(B_CAN_STOP_THREAD, data, true);
+			// pthread_mutex_lock(&data->mutex->thread_mutex);
+			// *data->can_stop_thread = true;
+			// pthread_mutex_unlock(&data->mutex->thread_mutex);
 			printf("------------ die ----------------\n");
 			return (NULL);
 		}
