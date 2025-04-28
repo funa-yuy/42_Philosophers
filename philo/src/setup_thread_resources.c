@@ -6,11 +6,11 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 14:10:33 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 17:15:50 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 21:38:01 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include <philo.h>
 
 int	setup_thread_resources(t_univ_rules rules, t_thread_arg **arg, \
 							pthread_mutex_t **forks, t_shared_data *shared)

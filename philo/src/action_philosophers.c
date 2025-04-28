@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   action_philosophers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 20:46:07 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:37:49 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include <philo.h>
 
 int	action_eat(t_thread_arg *data, t_univ_rules rules, int *eat_num)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   printf_philo_status.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunakos <mfunakos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 19:28:46 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 20:47:00 by mfunakos         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:37:59 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include <philo.h>
 
 void	printf_philo_status(char *status, t_thread_arg *data, int n_philo)
 {

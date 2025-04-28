@@ -6,22 +6,11 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:27:06 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 19:43:47 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/27 21:39:51 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
-
-// void	print_niv_rules(t_univ_rules *rules)
-// {
-// 	printf("--- rules 情報 ---\n");
-// 	printf("Philosophers: %d\n", rules->total_philo);
-// 	printf("Time to die: %d\n", rules->time_die_ms);
-// 	printf("Time to eat: %d\n", rules->time_eat_ms);
-// 	printf("Time to sleep: %d\n", rules->time_sleep_ms);
-// 	printf("Each must eat: %d\n", rules->must_eat);
-// 	printf("-----------------\n");
-// }
+#include <philo.h>
 
 bool	is_numeric_str(const char *str)
 {
@@ -78,6 +67,5 @@ int	init_univ_rules(t_univ_rules *rules, int argc, char *argv[])
 		rules->must_eat = ft_atoi(argv[5]);
 	else
 		rules->must_eat = -1;
-	// print_niv_rules(rules);
 	return (0);
 }
