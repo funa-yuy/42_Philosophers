@@ -6,7 +6,7 @@
 /*   By: miyuu <miyuu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 22:23:29 by miyuu             #+#    #+#             */
-/*   Updated: 2025/04/27 21:37:49 by miyuu            ###   ########.fr       */
+/*   Updated: 2025/04/28 16:06:35 by miyuu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	*action_philosophers(void *arg)
 	rules = data->u_rules;
 	eat_num = 0;
 	while (!get_bool_mutex(B_CAN_START_EAT, data))
-		usleep(100);
+		;
 	if (data->philo_id % 2 == 0)
 		thinking_lag(rules);
 	while (!get_bool_mutex(B_CAN_STOP_THREAD, data))
